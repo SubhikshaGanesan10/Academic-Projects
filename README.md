@@ -1,4 +1,4 @@
-# 🚀 Projects
+# 🚀 Academic Projects
 Welcome to my Projects repository! This space showcases a collection of my personal and academic projects, highlighting my software development skills, problem-solving abilities, and creativity.
 
 ## 📚 About
