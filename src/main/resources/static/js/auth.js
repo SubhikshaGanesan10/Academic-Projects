@@ -13,5 +13,7 @@ async function getCurrentUser() {
 
 async function logout() {
 	await fetch('/api/auth/logout', { method: 'POST' });
-	window.location.href = 'Cinema.html';
+	// Absolute path (leading /) so this works correctly no matter which
+	// folder depth the calling page lives at (e.g. tickets/checkout.html).
+	window.location.href = '/Cinema.html';
 }

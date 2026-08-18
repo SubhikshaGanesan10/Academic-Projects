@@ -14,7 +14,7 @@
 
 <body>
 		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-			<a href="Cinema.html" class="navbar-brand">E-CinemaX</a>
+			<a href="../Cinema.html" class="navbar-brand">E-CinemaX</a>
 			<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -23,23 +23,23 @@
 					<input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
 					<button class="btn btn-outline-light my-2" type="submit"><i class="fas fa-search"></i></button>
 				</form>
-				<ul class="navbar-nav ml-auto">
+				<ul class="navbar-nav ml-auto" id="authNav">
 					<li class="nav-item">
-						<a href="Customerlogin.html" data-toggle="tooltip" title="Login" class="nav-link"><i class="fas fa-user"></i> <span class="sr-only">LOGIN</span></a>
+						<a href="../Customerlogin.html" data-toggle="tooltip" title="Login" class="nav-link"><i class="fas fa-user"></i> <span class="sr-only">LOGIN</span></a>
 					</li>
 					<li class="nav-item">
-						<a href="Registration.html" class="nav-link">SIGN UP</a>
+						<a href="../Registration.html" class="nav-link">SIGN UP</a>
 					</li>
 				</ul>
-			</div>         
+			</div>
 		</nav>
 
 	<div class="container my-container">
 	<br><br>
 		<ul class = "movie-details">
-		  <li class= "list-items"><b>MOVIE:</b> Uncharted</li>
-		  <li class= "list-items"><b>SHOW DATE:</b> 30th September 2022</li>
-		  <li class= "list-items"><b>SHOW TIME:</b> 1:15PM</li>
+		  <li class= "list-items"><b>MOVIE:</b> <span id="movieTitle"></span></li>
+		  <li class= "list-items"><b>SHOW DATE:</b> <span id="showDate"></span></li>
+		  <li class= "list-items"><b>SHOW TIME:</b> <span id="showTime"></span></li>
 		</ul>
 		<table>
 		<br>
@@ -47,9 +47,9 @@
 				<th colspan="2">ADD TICKETS<hr></th>
 			</tr>
 			<tr>
-				<td class="ageBasedticket">SENIOR TICKET ($10)</td>
+				<td class="ageBasedticket">SENIOR TICKET ($<span id="priceSENIOR">-</span>)</td>
 				<td>
-					<div class="wrapper">
+					<div class="wrapper" data-ticket-type="SENIOR">
 						<span class="minus">-</span>
 						<span class="number">00</span>
 						<span class="plus">+</span>
@@ -57,9 +57,9 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="ageBasedticket">ADULT TICKET $(12)</td>
+				<td class="ageBasedticket">ADULT TICKET ($<span id="priceADULT">-</span>)</td>
 				<td>
-					<div class="wrapper">
+					<div class="wrapper" data-ticket-type="ADULT">
 						<span class="minus">-</span>
 						<span class="number">00</span>
 						<span class="plus">+</span>
@@ -67,9 +67,9 @@
 				</td>
 			</tr>
 			<tr>
-				<td class="ageBasedticket">CHILD TICKET $(7)</td>
+				<td class="ageBasedticket">CHILD TICKET ($<span id="priceCHILD">-</span>)</td>
 				<td>
-					<div class="wrapper">
+					<div class="wrapper" data-ticket-type="CHILD">
 						<span class="minus">-</span>
 						<span class="number">00</span>
 						<span class="plus">+</span>
@@ -82,15 +82,6 @@
 		<br><hr><br>
 	</div>
 	<div class="seatSection">
-		<!-- <div class="movie-container">
-			<label>Pick a movie:</label>
-			<select id="movie">
-				<option value="10">Avengers: Endgame ($10)</option>
-				<option value="12">Joker ($12)</option>
-				<option value="8">Toy Story 4 ($8)</option>
-				<option value="9">The Lion King ($9)</option>
-			</select>
-		</div> -->
 		<table><tr><th class = "seatTitle">SELECT SEATS<hr></th></tr></table>
 		<ul class="showcase">
 			<li>
@@ -109,76 +100,17 @@
 
 		<div class="seatcontainer">
 			<div class="screen"></div>
-
-			<div class="row">
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-			</div>
-			<div class="row">
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat occupied"></div>
-				<div class="seat occupied"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-			</div>
-			<div class="row">
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat occupied"></div>
-				<div class="seat occupied"></div>
-			</div>
-			<div class="row">
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-			</div>
-			<div class="row">
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat occupied"></div>
-				<div class="seat occupied"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-			</div>
-			<div class="row">
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat"></div>
-				<div class="seat occupied"></div>
-				<div class="seat occupied"></div>
-				<div class="seat occupied"></div>
-				<div class="seat"></div>
-			</div>
+			<div id="seatGrid"></div>
 		</div>
 
 		<p class="text">
 			You have selected <span id="count">0</span> seats for a price of $<span id="total">0</span>
 		</p>
+		<div id="bookingError" class="alert alert-danger" style="display: none; max-width: 500px; margin: 0 auto;"></div>
 		<br>
 		<div>
-			<button class = "submitButton" style="float:left; margin-right: 3px"><a style = "text-decoration: none; color: white;" href = "checkout.html">CONFIRM</a></button>
-			<button class = "submitButton" style="float:right; margin-left: 3px"><a style = "text-decoration: none; color: white;" href="file:///C:/Users/Subhiksha/Desktop/CES/descriptions/uncharted_descriptions.html">BACK</a></button>	
+			<button class = "submitButton" id="confirmButton" style="float:left; margin-right: 3px">CONFIRM</button>
+			<button class = "submitButton" id="backButton" style="float:right; margin-left: 3px">BACK</button>
 		</div>
 	</div>
 	<div class="container-fluid my-container">
@@ -194,26 +126,170 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
 		integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 		crossorigin="anonymous"></script>
-	<!-- <script src="script.js"></script> -->
-	<!-- <script>
-			const plus = document.querySelector(".plus"),
-			minus = document.querySelector(".minus"),
-			num = document.querySelector(".num"),
-			let a = 1;
-			plus.addEventListener("click", ()function{
-				a++;
-				a = (a<10)?"0"+a:a;
-				num.innerText = a;
+	<script src="../js/format.js"></script>
+	<script src="../js/auth.js"></script>
+	<script>
+		const params = new URLSearchParams(window.location.search);
+		const showtimeId = params.get('showtimeId');
+
+		const ticketPrices = {};
+		const ticketQuantities = { SENIOR: 0, ADULT: 0, CHILD: 0 };
+		const selectedSeatIds = new Set();
+		let movieId = null;
+
+		async function init() {
+			const user = await getCurrentUser();
+			if (!user) {
+				window.location.href = `../Customerlogin.html?returnUrl=${encodeURIComponent(window.location.href)}`;
+				return;
+			}
+			document.getElementById('authNav').innerHTML = `
+				<li class="nav-item">
+					<a href="../Useraccount.html" class="nav-link"><i class="fas fa-user" style="margin-right: 10px"></i>ACCOUNT</a>
+				</li>
+				<li class="nav-item">
+					<a href="#" class="nav-link" id="logoutLink">LOGOUT</a>
+				</li>`;
+			document.getElementById('logoutLink').addEventListener('click', (event) => {
+				event.preventDefault();
+				logout();
 			});
-			
-			minus.addEventListener("click", ()function{
-				if(a>1){
-					a--;
-					a = (a<10)?"0"+a:a;
-					num.innerText = a;
+
+			const [ticketTypesResponse, seatMapResponse] = await Promise.all([
+				fetch('/api/ticket-types'),
+				fetch(`/api/showtimes/${showtimeId}/seats`)
+			]);
+
+			if (!seatMapResponse.ok) {
+				document.querySelector('.movie-details').innerHTML = '<li class="list-items">Showtime not found.</li>';
+				return;
+			}
+
+			(await ticketTypesResponse.json()).forEach(type => {
+				ticketPrices[type.name] = type.price;
+				document.getElementById('price' + type.name).textContent = type.price;
+			});
+
+			const seatMap = await seatMapResponse.json();
+			movieId = seatMap.movieId;
+			document.getElementById('movieTitle').textContent = seatMap.movieTitle;
+			document.getElementById('showDate').textContent = formatDate(seatMap.showDate);
+			document.getElementById('showTime').textContent = formatTime(seatMap.showTime);
+
+			renderSeatGrid(seatMap.seats);
+		}
+
+		function renderSeatGrid(seats) {
+			const seatsByRow = {};
+			seats.forEach(seat => {
+				if (!seatsByRow[seat.rowLabel]) {
+					seatsByRow[seat.rowLabel] = [];
+				}
+				seatsByRow[seat.rowLabel].push(seat);
+			});
+
+			const grid = document.getElementById('seatGrid');
+			grid.innerHTML = Object.keys(seatsByRow).sort().map(row => `
+				<div class="row">
+					${seatsByRow[row].map(seat =>
+						`<div class="seat ${seat.status === 'BOOKED' ? 'occupied' : ''}" data-seat-id="${seat.id}"></div>`
+					).join('')}
+				</div>`).join('');
+
+			grid.querySelectorAll('.seat:not(.occupied)').forEach(seatEl => {
+				seatEl.addEventListener('click', () => {
+					const seatId = Number(seatEl.dataset.seatId);
+					if (selectedSeatIds.has(seatId)) {
+						selectedSeatIds.delete(seatId);
+						seatEl.classList.remove('selected');
+					} else {
+						selectedSeatIds.add(seatId);
+						seatEl.classList.add('selected');
+					}
+					updateTotals();
+				});
+			});
+		}
+
+		function totalTicketCount() {
+			return Object.values(ticketQuantities).reduce((sum, qty) => sum + qty, 0);
+		}
+
+		function totalPrice() {
+			return Object.keys(ticketQuantities)
+				.reduce((sum, type) => sum + ticketQuantities[type] * (ticketPrices[type] || 0), 0);
+		}
+
+		function updateTotals() {
+			document.getElementById('count').textContent = selectedSeatIds.size;
+			document.getElementById('total').textContent = totalPrice().toFixed(2);
+		}
+
+		document.querySelectorAll('.wrapper').forEach(wrapper => {
+			const type = wrapper.dataset.ticketType;
+			const numberEl = wrapper.querySelector('.number');
+
+			wrapper.querySelector('.plus').addEventListener('click', () => {
+				ticketQuantities[type]++;
+				numberEl.textContent = String(ticketQuantities[type]).padStart(2, '0');
+				updateTotals();
+			});
+
+			wrapper.querySelector('.minus').addEventListener('click', () => {
+				if (ticketQuantities[type] > 0) {
+					ticketQuantities[type]--;
+					numberEl.textContent = String(ticketQuantities[type]).padStart(2, '0');
+					updateTotals();
 				}
 			});
-		</script> -->
+		});
+
+		document.getElementById('backButton').addEventListener('click', () => {
+			window.location.href = movieId ? `../movieDetails.html?id=${movieId}` : '../Cinema.html';
+		});
+
+		document.getElementById('confirmButton').addEventListener('click', async () => {
+			const errorBox = document.getElementById('bookingError');
+			errorBox.style.display = 'none';
+
+			const tickets = totalTicketCount();
+			if (tickets === 0) {
+				errorBox.textContent = 'Please select at least one ticket.';
+				errorBox.style.display = 'block';
+				return;
+			}
+			if (selectedSeatIds.size !== tickets) {
+				errorBox.textContent = `You selected ${tickets} ticket(s) but ${selectedSeatIds.size} seat(s) - these must match.`;
+				errorBox.style.display = 'block';
+				return;
+			}
+
+			const ticketItems = Object.keys(ticketQuantities)
+				.filter(type => ticketQuantities[type] > 0)
+				.map(type => ({ ticketType: type, quantity: ticketQuantities[type] }));
+
+			const response = await fetch('/api/bookings', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					showtimeId: Number(showtimeId),
+					seatIds: [...selectedSeatIds],
+					ticketItems: ticketItems
+				})
+			});
+
+			if (!response.ok) {
+				errorBox.textContent = 'Could not complete booking - one of your selected seats may have just been taken. Please go back and try again.';
+				errorBox.style.display = 'block';
+				return;
+			}
+
+			const booking = await response.json();
+			window.location.href = `checkout.html?bookingId=${booking.id}`;
+		});
+
+		init();
+	</script>
 
 </body>
 

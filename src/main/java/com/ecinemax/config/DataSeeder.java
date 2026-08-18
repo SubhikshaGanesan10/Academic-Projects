@@ -3,10 +3,17 @@ package com.ecinemax.config;
 import com.ecinemax.entity.AppUser;
 import com.ecinemax.entity.Movie;
 import com.ecinemax.entity.MovieStatus;
+import com.ecinemax.entity.Screen;
+import com.ecinemax.entity.Seat;
+import com.ecinemax.entity.SeatStatus;
 import com.ecinemax.entity.Showtime;
+import com.ecinemax.entity.ShowtimeSeat;
 import com.ecinemax.entity.UserRole;
 import com.ecinemax.repository.MovieRepository;
+import com.ecinemax.repository.ScreenRepository;
+import com.ecinemax.repository.SeatRepository;
 import com.ecinemax.repository.ShowtimeRepository;
+import com.ecinemax.repository.ShowtimeSeatRepository;
 import com.ecinemax.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +21,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 // CommandLineRunner's run() method executes once, automatically, right after
@@ -25,13 +33,21 @@ public class DataSeeder implements CommandLineRunner {
 
     private final MovieRepository movieRepository;
     private final ShowtimeRepository showtimeRepository;
+    private final ScreenRepository screenRepository;
+    private final SeatRepository seatRepository;
+    private final ShowtimeSeatRepository showtimeSeatRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
     public DataSeeder(MovieRepository movieRepository, ShowtimeRepository showtimeRepository,
+                       ScreenRepository screenRepository, SeatRepository seatRepository,
+                       ShowtimeSeatRepository showtimeSeatRepository,
                        UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.movieRepository = movieRepository;
         this.showtimeRepository = showtimeRepository;
+        this.screenRepository = screenRepository;
+        this.seatRepository = seatRepository;
+        this.showtimeSeatRepository = showtimeSeatRepository;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -113,19 +129,42 @@ public class DataSeeder implements CommandLineRunner {
         movieRepository.saveAll(nowShowing);
         movieRepository.saveAll(comingSoon);
 
+        // One screen, 6 rows (A-F) x 8 seats, matching the seat map that was
+        // already hardcoded into the original buytickets.html.
+        Screen screen = screenRepository.save(new Screen("Screen 1", 6, 8));
+        List<Seat> seats = new ArrayList<>();
+        for (char row = 'A'; row < 'A' + screen.getTotalRows(); row++) {
+            for (int seatNumber = 1; seatNumber <= screen.getSeatsPerRow(); seatNumber++) {
+                seats.add(new Seat(screen, String.valueOf(row), seatNumber));
+            }
+        }
+        seats = seatRepository.saveAll(seats);
+
         // Give each now-showing movie a few showtimes over the next 3 days,
-        // so Phase 2's showtimes grid has real data to display.
+        // so Phase 2's showtimes grid has real data to display. Every
+        // showtime gets one AVAILABLE ShowtimeSeat row per physical seat -
+        // that's what buytickets.html's seat map is actually built from.
         List<LocalTime> dailyTimes = List.of(LocalTime.of(13, 15), LocalTime.of(16, 45), LocalTime.of(19, 30));
         LocalDate today = LocalDate.now();
 
+        List<ShowtimeSeat> allShowtimeSeats = new ArrayList<>();
         for (Movie movie : nowShowing) {
             for (int dayOffset = 0; dayOffset < 3; dayOffset++) {
                 LocalDate showDate = today.plusDays(dayOffset);
                 for (LocalTime time : dailyTimes) {
-                    showtimeRepository.save(new Showtime(movie, showDate, time));
+                    Showtime showtime = showtimeRepository.save(new Showtime(movie, screen, showDate, time));
+
+                    for (Seat seat : seats) {
+                        allShowtimeSeats.add(new ShowtimeSeat(showtime, seat, SeatStatus.AVAILABLE));
+                    }
                 }
             }
         }
+        // One batch call instead of one save() per row (10 movies x 3 days x
+        // 3 times x 48 seats = 4320 rows) - saveAll still issues one INSERT
+        // per row, but as a single transaction instead of thousands of tiny
+        // ones, which is far faster over a real network connection.
+        showtimeSeatRepository.saveAll(allShowtimeSeats);
     }
 
     // Public registration only ever creates CUSTOMER accounts, so an ADMIN

@@ -37,15 +37,15 @@
 					<input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
 					<button class="btn btn-outline-light my-2" type="submit"><i class="fas fa-search"></i></button>
 				</form>
-				<ul class="navbar-nav ml-auto">
+				<ul class="navbar-nav ml-auto" id="authNav">
 					<li class="nav-item">
-						<a href="Customerlogin.html" data-toggle="tooltip" title="Login" class="nav-link"><i class="fas fa-user"></i> <span class="sr-only">LOGIN</span></a>
+						<a href="../Customerlogin.html" data-toggle="tooltip" title="Login" class="nav-link"><i class="fas fa-user"></i> <span class="sr-only">LOGIN</span></a>
 					</li>
 					<li class="nav-item">
-						<a href="Registration.html" class="nav-link">LOGOUT</a>
+						<a href="../Registration.html" class="nav-link">SIGN UP</a>
 					</li>
 				</ul>
-			</div>         
+			</div>
 		</nav>
 
 <div class="container" style="padding:5px">
@@ -63,52 +63,47 @@
         <h4 class="d-flex justify-content-between align-items-center mb-3">
           <span class="text-primary" style = "margin: auto;">Order Summary</span>
         </h4>
-        <ul class="list-group mb-3">
+        <ul class="list-group mb-3" id="orderSummaryList">
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+              <h6 class="my-0">Booking Reference</h6>
+            </div>
+            <span class="text-muted" id="summaryReference"></span>
+          </li>
           <li class="list-group-item d-flex justify-content-between lh-sm">
             <div>
               <h6 class="my-0">Movie Name</h6>
-              <small class="text-muted">Uncharted</small>
+              <small class="text-muted" id="summaryMovie"></small>
             </div>
-            <span class="text-muted">$12</span>
           </li>
            <li class="list-group-item d-flex justify-content-between lh-sm">
             <div>
               <h6 class="my-0">Show Date</h6>
-              <small class="text-muted">Weekend</small>
             </div>
-            <span class="text-muted">20/05/2022</span>
-          </li>
-           <li class="list-group-item d-flex justify-content-between lh-sm">
-            <div>
-              <h6 class="my-0">Number of Ticket</h6>
-              <small class="text-muted"></small>
-            </div>
-            <span class="text-muted">1</span>
+            <span class="text-muted" id="summaryDate"></span>
           </li>
           <li class="list-group-item d-flex justify-content-between lh-sm">
             <div>
               <h6 class="my-0">Show Time</h6>
-              <small class="text-muted"></small>
             </div>
-            <span class="text-muted">5pm UTC-5</span>
+            <span class="text-muted" id="summaryTime"></span>
           </li>
           <li class="list-group-item d-flex justify-content-between lh-sm">
             <div>
-              <h6 class="my-0">Seat Number</h6>
-              <small class="text-muted"></small>
+              <h6 class="my-0">Seats</h6>
             </div>
-            <span class="text-muted">30</span>
+            <span class="text-muted" id="summarySeats"></span>
           </li>
-          <li class="list-group-item d-flex justify-content-between bg-light">
-            <div class="text-success">
-              <h6 class="my-0">Promo code</h6>
-              <small>Earlybird</small>
+          <li class="list-group-item" id="summaryItems"></li>
+          <li class="list-group-item d-flex justify-content-between lh-sm">
+            <div>
+              <h6 class="my-0">Payment</h6>
             </div>
-            <span class="text-success">−$5</span>
+            <span class="text-muted" id="summaryPayment"></span>
           </li>
           <li class="list-group-item d-flex justify-content-between">
             <span>Total (USD)</span>
-            <strong>$7</strong>
+            <strong id="summaryTotal"></strong>
           </li>
         </ul>
       </div>
@@ -121,7 +116,60 @@
 <div class="container-fluid">
 <br><hr class = "line"><br></div>
 
-    <script src="assets/dist/js/bootstrap.bundle.min.js"></script>
       <script src="myScript.js"></script>
+      <script src="../js/format.js"></script>
+      <script src="../js/auth.js"></script>
+      <script>
+        const params = new URLSearchParams(window.location.search);
+        const bookingId = params.get('bookingId');
+
+        async function init() {
+          const user = await getCurrentUser();
+          if (!user) {
+            window.location.href = `../Customerlogin.html?returnUrl=${encodeURIComponent(window.location.href)}`;
+            return;
+          }
+          document.getElementById('authNav').innerHTML = `
+            <li class="nav-item">
+              <a href="../Useraccount.html" class="nav-link"><i class="fas fa-user" style="margin-right: 10px"></i>ACCOUNT</a>
+            </li>
+            <li class="nav-item">
+              <a href="#" class="nav-link" id="logoutLink">LOGOUT</a>
+            </li>`;
+          document.getElementById('logoutLink').addEventListener('click', (event) => {
+            event.preventDefault();
+            logout();
+          });
+
+          const response = await fetch(`/api/bookings/${bookingId}`);
+          if (!response.ok) {
+            document.getElementById('orderSummaryList').innerHTML = '<li class="list-group-item">Booking not found.</li>';
+            return;
+          }
+
+          const booking = await response.json();
+
+          if (booking.status !== 'CONFIRMED') {
+            // Someone navigated here directly without actually paying yet.
+            window.location.href = `checkout.html?bookingId=${bookingId}`;
+            return;
+          }
+
+          document.getElementById('summaryReference').textContent = booking.bookingReference;
+          document.getElementById('summaryMovie').textContent = booking.movieTitle;
+          document.getElementById('summaryDate').textContent = formatDate(booking.showDate);
+          document.getElementById('summaryTime').textContent = formatTime(booking.showTime);
+          document.getElementById('summarySeats').textContent = booking.seatLabels.join(', ');
+          document.getElementById('summaryItems').innerHTML = booking.items.map(item => `
+            <div class="d-flex justify-content-between lh-sm">
+              <span class="text-muted">${item.quantity} x ${item.ticketType}</span>
+              <span class="text-muted">$${item.lineTotal.toFixed(2)}</span>
+            </div>`).join('');
+          document.getElementById('summaryPayment').textContent = `${booking.paymentMethod} ending in ${booking.maskedCardLast4}`;
+          document.getElementById('summaryTotal').textContent = `$${booking.total.toFixed(2)}`;
+        }
+
+        init();
+      </script>
   </body>
 </html>

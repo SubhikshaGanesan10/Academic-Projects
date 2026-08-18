@@ -12,8 +12,7 @@ import jakarta.persistence.Table;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-// One row per scheduled screening of a movie (a date + time slot).
-// Screen/hall selection is deferred to Phase 4, when seat booking needs it.
+// One row per scheduled screening of a movie (a movie + screen + date + time).
 @Entity
 @Table(name = "showtimes")
 public class Showtime {
@@ -28,14 +27,19 @@ public class Showtime {
     @JoinColumn(name = "movie_id")
     private Movie movie;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "screen_id")
+    private Screen screen;
+
     private LocalDate showDate;
     private LocalTime showTime;
 
     public Showtime() {
     }
 
-    public Showtime(Movie movie, LocalDate showDate, LocalTime showTime) {
+    public Showtime(Movie movie, Screen screen, LocalDate showDate, LocalTime showTime) {
         this.movie = movie;
+        this.screen = screen;
         this.showDate = showDate;
         this.showTime = showTime;
     }
@@ -50,6 +54,14 @@ public class Showtime {
 
     public void setMovie(Movie movie) {
         this.movie = movie;
+    }
+
+    public Screen getScreen() {
+        return screen;
+    }
+
+    public void setScreen(Screen screen) {
+        this.screen = screen;
     }
 
     public LocalDate getShowDate() {

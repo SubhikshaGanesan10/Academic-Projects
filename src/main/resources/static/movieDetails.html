@@ -87,6 +87,7 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 				crossorigin="anonymous"></script>
 		<script src="myScript.js"></script>
+		<script src="js/format.js"></script>
 
 		<script>
 			const params = new URLSearchParams(window.location.search);
@@ -148,18 +149,6 @@
 							</div>`).join('')}
 					</div>
 					<br><br>`).join('');
-			}
-
-			function formatDate(isoDate) {
-				const date = new Date(isoDate + 'T00:00:00');
-				return date.toLocaleDateString('en-US', { day: 'numeric', month: 'long', year: 'numeric' }).toUpperCase();
-			}
-
-			function formatTime(isoTime) {
-				const [hours, minutes] = isoTime.split(':').map(Number);
-				const period = hours >= 12 ? 'PM' : 'AM';
-				const hour12 = ((hours + 11) % 12) + 1;
-				return `${hour12}:${String(minutes).padStart(2, '0')}${period}`;
 			}
 
 			loadMovieDetails();

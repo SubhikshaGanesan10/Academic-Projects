@@ -16,7 +16,7 @@ and standard Spring Boot patterns over advanced abstractions.
 
 ## Project Status
 
-Built incrementally, phase by phase. Current status: **Phase 3 — authentication complete.**
+Built incrementally, phase by phase. Current status: **Phase 4 — booking and seat selection complete.**
 
 | Phase | Description | Status |
 |---|---|---|
@@ -24,7 +24,7 @@ Built incrementally, phase by phase. Current status: **Phase 3 — authenticatio
 | 1 | Database/data layer | Done |
 | 2 | Movie browsing and movie details | Done |
 | 3 | Authentication | Done |
-| 4 | Booking and seat selection | Not started |
+| 4 | Booking and seat selection | Done |
 | 5 | Customer account and booking history | Not started |
 | 6 | Admin functionality | Not started |
 | 7 | Testing, validation, error handling, cleanup | Not started |
@@ -60,6 +60,10 @@ account:
 Login uses server-side sessions (a cookie), not tokens - once logged in via `Customerlogin.html`,
 the browser stays authenticated across requests until logout or the session expires.
 
+Seed data includes one screen (6 rows x 8 seats) and showtimes for every Now Showing movie over
+the next 3 days, so there's something real to book. Payment is entirely mocked - no real payment
+gateway is contacted, and only the last 4 digits of any card number entered are ever stored.
+
 ## Known Gaps / Backlog
 
 Deliberately deferred, not forgotten:
@@ -67,6 +71,16 @@ Deliberately deferred, not forgotten:
 - **Forgot/reset password** — the link on `Customerlogin.html` is still a placeholder. Needs a
   reset-token flow and either a real or mocked email step; not core to the booking flow, so
   postponed until after the main phases are done (Phase 7 or its own small phase).
+- **Promo codes** — `checkout.html`'s promo code UI was removed rather than left non-functional
+  with a fake pre-applied discount (as it was in the original prototype). Real promo code
+  validation belongs with the rest of Promotion management in Phase 6.
+- **Seat booking concurrency** — two people selecting the same seat at the exact same moment is
+  checked (the second one gets a 409), but there's no optimistic locking, so it's a "check then
+  act" race rather than a fully atomic guarantee. Planned hardening for Phase 7.
+- **Abandoned checkouts don't release seats** — if someone reaches `checkout.html` (creating a
+  PENDING booking, which marks seats BOOKED) and never pays, those seats stay reserved
+  indefinitely. A real system would expire PENDING bookings after a few minutes; deferred to
+  Phase 7.
 
 ## Project Structure
 
