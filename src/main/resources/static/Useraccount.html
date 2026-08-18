@@ -13,7 +13,7 @@
 	
 	<body>
 		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-			<a href="customerHomePage.html" class="navbar-brand">E-CinemaX</a>
+			<a href="Cinema.html" class="navbar-brand">E-CinemaX</a>
 			<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -27,7 +27,7 @@
 						<a href="Useraccount.html"class="nav-link"><i class="fas fa-user" style="margin-right: 10px"></i>ACCOUNT</a>
 					</li>
 					<li class="nav-item">
-						<a href="Cinema.html" class="nav-link">LOGOUT</a>
+						<a href="#" class="nav-link" id="logoutLink">LOGOUT</a>
 					</li>
 				</ul>
 			</div>         
@@ -82,5 +82,12 @@
     </div>
   </div>
 </section>
+	<script src="js/auth.js"></script>
+	<script>
+		document.getElementById('logoutLink').addEventListener('click', (event) => {
+			event.preventDefault();
+			logout();
+		});
+	</script>
 	</body>
 </html>

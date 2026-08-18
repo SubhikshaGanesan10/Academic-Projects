@@ -13,7 +13,7 @@
 	
 	<body>
 		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
-			<a href="#" class="navbar-brand">E-CinemaX</a>
+			<a href="Cinema.html" class="navbar-brand">E-CinemaX</a>
 			<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
 				<span class="navbar-toggler-icon"></span>
 			</button>
@@ -22,7 +22,7 @@
 					<input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
 					<button class="btn btn-outline-light my-2" type="submit"><i class="fas fa-search"></i></button>
 				</form>
-				<ul class="navbar-nav ml-auto">
+				<ul class="navbar-nav ml-auto" id="authNav">
 					<li class="nav-item">
 						<a href="Customerlogin.html" data-toggle="tooltip" title="Login" class="nav-link"><i class="fas fa-user"></i> <span class="sr-only">LOGIN</span></a>
 					</li>
@@ -30,7 +30,7 @@
 						<a href="Registration.html" class="nav-link">SIGN UP</a>
 					</li>
 				</ul>
-			</div>         
+			</div>
 		</nav>
 	
 		<div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
@@ -95,7 +95,30 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 			crossorigin="anonymous"></script>
 		<script src="myScript.js"></script>
+		<script src="js/auth.js"></script>
 		<script>
+			// If someone is logged in, swap the Login/Sign Up links for
+			// Account/Logout, matching what customerHomePage.html used to show.
+			async function renderNav() {
+				const user = await getCurrentUser();
+				if (!user) {
+					return;
+				}
+				document.getElementById('authNav').innerHTML = `
+					<li class="nav-item">
+						<a href="Useraccount.html" class="nav-link"><i class="fas fa-user" style="margin-right: 10px"></i>ACCOUNT</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" class="nav-link" id="logoutLink">LOGOUT</a>
+					</li>`;
+				document.getElementById('logoutLink').addEventListener('click', (event) => {
+					event.preventDefault();
+					logout();
+				});
+			}
+
+			renderNav();
+
 			// Splits an array into groups of 5, matching the original layout:
 			// one row of 5 posters, then one row of 5 titles/buttons underneath.
 			function chunkIntoFives(movies) {

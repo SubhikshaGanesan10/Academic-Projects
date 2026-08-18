@@ -1,11 +1,15 @@
 package com.ecinemax.config;
 
+import com.ecinemax.entity.AppUser;
 import com.ecinemax.entity.Movie;
 import com.ecinemax.entity.MovieStatus;
 import com.ecinemax.entity.Showtime;
+import com.ecinemax.entity.UserRole;
 import com.ecinemax.repository.MovieRepository;
 import com.ecinemax.repository.ShowtimeRepository;
+import com.ecinemax.repository.UserRepository;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -21,14 +25,21 @@ public class DataSeeder implements CommandLineRunner {
 
     private final MovieRepository movieRepository;
     private final ShowtimeRepository showtimeRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public DataSeeder(MovieRepository movieRepository, ShowtimeRepository showtimeRepository) {
+    public DataSeeder(MovieRepository movieRepository, ShowtimeRepository showtimeRepository,
+                       UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.movieRepository = movieRepository;
         this.showtimeRepository = showtimeRepository;
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public void run(String... args) {
+        seedAdminUser();
+
         if (movieRepository.count() > 0) {
             return;
         }
@@ -115,5 +126,20 @@ public class DataSeeder implements CommandLineRunner {
                 }
             }
         }
+    }
+
+    // Public registration only ever creates CUSTOMER accounts, so an ADMIN
+    // account has to be created some other way - here, seeded directly.
+    private void seedAdminUser() {
+        if (userRepository.existsByEmail("admin@ecinemax.com")) {
+            return;
+        }
+
+        AppUser admin = new AppUser(
+                "Admin", "User", "admin@ecinemax.com",
+                passwordEncoder.encode("Admin123!"),
+                null, null, UserRole.ADMIN
+        );
+        userRepository.save(admin);
     }
 }

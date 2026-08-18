@@ -16,14 +16,14 @@ and standard Spring Boot patterns over advanced abstractions.
 
 ## Project Status
 
-Built incrementally, phase by phase. Current status: **Phase 2 — movie browsing and movie details complete.**
+Built incrementally, phase by phase. Current status: **Phase 3 — authentication complete.**
 
 | Phase | Description | Status |
 |---|---|---|
 | 0 | Project setup (this scaffold) | Done |
 | 1 | Database/data layer | Done |
 | 2 | Movie browsing and movie details | Done |
-| 3 | Authentication | Not started |
+| 3 | Authentication | Done |
 | 4 | Booking and seat selection | Not started |
 | 5 | Customer account and booking history | Not started |
 | 6 | Admin functionality | Not started |
@@ -51,7 +51,22 @@ Then open http://localhost:8080/Cinema.html in a browser.
 
 Requires a local MySQL server running on port 3306, with a database `ecinemax_db` and a user
 `ecinemax_app` matching the credentials in `application.properties`. On first startup, the
-`movies` and `showtimes` tables are created automatically and seeded with 15 sample movies.
+database tables are created automatically and seeded with 15 sample movies plus a seeded admin
+account:
+
+- **Admin login:** `admin@ecinemax.com` / `Admin123!`
+- **Customer accounts:** created via the Registration page (`Registration.html`)
+
+Login uses server-side sessions (a cookie), not tokens - once logged in via `Customerlogin.html`,
+the browser stays authenticated across requests until logout or the session expires.
+
+## Known Gaps / Backlog
+
+Deliberately deferred, not forgotten:
+
+- **Forgot/reset password** — the link on `Customerlogin.html` is still a placeholder. Needs a
+  reset-token flow and either a real or mocked email step; not core to the booking flow, so
+  postponed until after the main phases are done (Phase 7 or its own small phase).
 
 ## Project Structure
 
@@ -63,6 +78,7 @@ src/main/java/com/ecinemax/
     controller/   REST controllers - thin HTTP layer, delegates to services
     dto/          Request/response shapes sent to the browser as JSON
     config/       App configuration and startup logic (e.g. DataSeeder)
+    security/     Spring Security config and the UserDetailsService bridge to AppUser
 src/main/resources/static/    The existing HTML/CSS/JS frontend, served directly by Spring Boot
 src/main/resources/application.properties   App configuration (datasource, JPA settings)
 pom.xml                       Maven build file and dependency list

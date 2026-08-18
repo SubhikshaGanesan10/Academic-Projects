@@ -46,18 +46,18 @@
           class="img-fluid" alt="Phone image">
       </div>
       <div class="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-        <form>
+        <form id="loginForm">
           <!-- Email input -->
           <div class="form-group required mb-4">
 			  <label class="form-check-label" for="form1Example13"><b>Email Address</b></label>
-            <input type="email" id="form1Example13" class="form-control required form-control-lg" />
+            <input type="email" id="form1Example13" required class="form-control required form-control-lg" />
 
           </div>
 
           <!-- Password input -->
           <div class="form-group required mb-4">
 			  <label class="form-check-label" for="form1Example23"><b>Password</b></label>
-            <input type="password" id="form1Example23" class="form-control required form-control-lg" />
+            <input type="password" id="form1Example23" required class="form-control required form-control-lg" />
 
           </div>
 
@@ -70,9 +70,10 @@
             <a href="#" style= "color:white; text-decoration:underline;">Forgot password?</a>
           </div>
 
+          <div id="loginError" class="alert alert-danger" style="display: none;"></div>
+
           <!-- Submit button -->
-          <button type="submit" class="btn btn-1 btn-primary btn-lg btn-block"><a href = "customerHomePage.html" style= "color:white; text-decoration:none;">Customer Login</a></button> 
-		  <button type="submit" class="btn btn-1 btn-primary btn-lg btn-block"><a href = "AdminMainPage.html" style= "color:white; text-decoration:none;">Admin Login</a></button>
+          <button type="submit" class="btn btn-1 btn-primary btn-lg btn-block">Login</button>
 			<br><a href="Registration.html" style= "color:white; text-decoration:underline;">Don't have an account? CREATE ACCOUNT</a>
 
         </form>
@@ -80,5 +81,31 @@
     </div>
   </div>
 </section>
+	<script>
+		document.getElementById('loginForm').addEventListener('submit', async (event) => {
+			event.preventDefault();
+
+			const errorBox = document.getElementById('loginError');
+			errorBox.style.display = 'none';
+
+			const response = await fetch('/api/auth/login', {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					email: document.getElementById('form1Example13').value,
+					password: document.getElementById('form1Example23').value
+				})
+			});
+
+			if (!response.ok) {
+				errorBox.textContent = 'Incorrect email or password.';
+				errorBox.style.display = 'block';
+				return;
+			}
+
+			const user = await response.json();
+			window.location.href = (user.role === 'ADMIN') ? 'AdminMainPage.html' : 'Cinema.html';
+		});
+	</script>
 	</body>
 </html>
