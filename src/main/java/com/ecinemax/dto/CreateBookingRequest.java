@@ -1,11 +1,21 @@
 package com.ecinemax.dto;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
 
 public class CreateBookingRequest {
 
+    @NotNull(message = "showtimeId is required")
     private Long showtimeId;
+
+    @NotEmpty(message = "Select at least one seat")
     private List<Long> seatIds;
+
+    @NotEmpty(message = "Select at least one ticket")
+    @Valid
     private List<TicketItemRequest> ticketItems;
 
     public Long getShowtimeId() {

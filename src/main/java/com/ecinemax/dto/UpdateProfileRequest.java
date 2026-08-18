@@ -1,13 +1,19 @@
 package com.ecinemax.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 import java.time.LocalDate;
 
 // Deliberately has no email field - email doubles as the login username, so
 // changing it is out of scope for this simple edit-profile form.
 public class UpdateProfileRequest {
 
+    @NotBlank(message = "First name is required")
     private String firstName;
+
+    @NotBlank(message = "Last name is required")
     private String lastName;
+
     private String phone;
     private LocalDate dateOfBirth;
 

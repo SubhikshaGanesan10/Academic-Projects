@@ -8,6 +8,7 @@ import com.ecinemax.repository.UserRepository;
 import com.ecinemax.service.AuthService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -41,12 +42,12 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public UserDto register(@RequestBody RegisterRequest request) {
+    public UserDto register(@Valid @RequestBody RegisterRequest request) {
         return authService.register(request);
     }
 
     @PostMapping("/login")
-    public UserDto login(@RequestBody LoginRequest request, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
+    public UserDto login(@Valid @RequestBody LoginRequest request, HttpServletRequest httpRequest, HttpServletResponse httpResponse) {
         Authentication authentication;
         try {
             authentication = authenticationManager.authenticate(

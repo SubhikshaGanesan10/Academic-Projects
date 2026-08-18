@@ -3,6 +3,7 @@ package com.ecinemax.controller;
 import com.ecinemax.dto.MovieDto;
 import com.ecinemax.dto.MovieRequest;
 import com.ecinemax.service.MovieService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,12 +25,12 @@ public class AdminMovieController {
     }
 
     @PostMapping
-    public MovieDto createMovie(@RequestBody MovieRequest request) {
+    public MovieDto createMovie(@Valid @RequestBody MovieRequest request) {
         return movieService.createMovie(request);
     }
 
     @PutMapping("/{id}")
-    public MovieDto updateMovie(@PathVariable Long id, @RequestBody MovieRequest request) {
+    public MovieDto updateMovie(@PathVariable Long id, @Valid @RequestBody MovieRequest request) {
         return movieService.updateMovie(id, request);
     }
 

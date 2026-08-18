@@ -1,6 +1,11 @@
 package com.ecinemax.dto;
 
 import com.ecinemax.entity.MovieStatus;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 import java.time.LocalDate;
 
@@ -8,17 +13,27 @@ import java.time.LocalDate;
 // MovieDto (the read-side response) since a request never carries an id.
 public class MovieRequest {
 
+    @NotBlank(message = "Title is required")
     private String title;
+
     private String genre;
+
+    @Positive(message = "Duration must be a positive number of minutes")
     private Integer durationMinutes;
+
     private LocalDate releaseDate;
     private String cast;
     private String director;
     private String producer;
     private String description;
+
+    @DecimalMin(value = "0.0", message = "Rating must be between 0 and 10")
+    @DecimalMax(value = "10.0", message = "Rating must be between 0 and 10")
     private Double rating;
+
     private String youtubeTrailerId;
     private String posterUrl;
+    @NotNull(message = "Category is required")
     private MovieStatus status;
 
     public String getTitle() {

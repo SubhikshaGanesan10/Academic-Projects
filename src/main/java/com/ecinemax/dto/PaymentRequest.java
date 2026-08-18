@@ -1,6 +1,8 @@
 package com.ecinemax.dto;
 
 import com.ecinemax.entity.PaymentMethod;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 // What checkout.html submits to "pay". This is a MOCK payment - cardNumber/
 // expiry/cvv are only used transiently to do basic validation and to derive
@@ -8,10 +10,19 @@ import com.ecinemax.entity.PaymentMethod;
 // anywhere and no real payment gateway is contacted.
 public class PaymentRequest {
 
+    @NotNull(message = "Payment method is required")
     private PaymentMethod method;
+
+    @NotBlank(message = "Cardholder name is required")
     private String cardholderName;
+
+    @NotBlank(message = "Card number is required")
     private String cardNumber;
+
+    @NotBlank(message = "Expiry is required")
     private String expiry;
+
+    @NotBlank(message = "CVV is required")
     private String cvv;
 
     public PaymentMethod getMethod() {

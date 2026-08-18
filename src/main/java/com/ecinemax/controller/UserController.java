@@ -4,6 +4,7 @@ import com.ecinemax.dto.ChangePasswordRequest;
 import com.ecinemax.dto.UpdateProfileRequest;
 import com.ecinemax.dto.UserProfileDto;
 import com.ecinemax.service.UserService;
+import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -27,12 +28,12 @@ public class UserController {
     }
 
     @PutMapping
-    public UserProfileDto updateProfile(@RequestBody UpdateProfileRequest request, Authentication authentication) {
+    public UserProfileDto updateProfile(@Valid @RequestBody UpdateProfileRequest request, Authentication authentication) {
         return userService.updateProfile(authentication.getName(), request);
     }
 
     @PutMapping("/password")
-    public void changePassword(@RequestBody ChangePasswordRequest request, Authentication authentication) {
+    public void changePassword(@Valid @RequestBody ChangePasswordRequest request, Authentication authentication) {
         userService.changePassword(authentication.getName(), request);
     }
 }

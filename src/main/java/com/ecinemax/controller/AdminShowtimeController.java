@@ -4,6 +4,7 @@ import com.ecinemax.dto.CreateShowtimeRequest;
 import com.ecinemax.dto.ScreenDto;
 import com.ecinemax.dto.ShowtimeDto;
 import com.ecinemax.service.BookingService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -28,7 +29,7 @@ public class AdminShowtimeController {
     }
 
     @PostMapping("/showtimes")
-    public ShowtimeDto createShowtime(@RequestBody CreateShowtimeRequest request) {
+    public ShowtimeDto createShowtime(@Valid @RequestBody CreateShowtimeRequest request) {
         return bookingService.createShowtime(request);
     }
 }

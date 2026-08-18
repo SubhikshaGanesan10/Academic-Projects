@@ -3,6 +3,7 @@ package com.ecinemax.controller;
 import com.ecinemax.dto.PromotionDto;
 import com.ecinemax.dto.PromotionRequest;
 import com.ecinemax.service.PromotionService;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,7 +30,7 @@ public class AdminPromotionController {
     }
 
     @PostMapping
-    public PromotionDto createPromotion(@RequestBody PromotionRequest request) {
+    public PromotionDto createPromotion(@Valid @RequestBody PromotionRequest request) {
         return promotionService.createPromotion(request);
     }
 
