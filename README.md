@@ -1,0 +1,69 @@
+# E-CinemaX
+
+An online movie ticket booking system, rebuilt from a static HTML/CSS/JS prototype into a
+full-stack Java application. This is a learning/portfolio project — the code favors clarity
+and standard Spring Boot patterns over advanced abstractions.
+
+## Tech Stack
+
+- **Backend:** Java 17, Spring Boot 4.1.0, Spring MVC / REST
+- **Data:** Spring Data JPA, Hibernate, MySQL
+- **Security:** Spring Security with server-side session authentication, BCrypt password hashing
+- **Frontend:** Plain HTML, CSS, and vanilla JavaScript (no frontend framework) served as static
+  resources by Spring Boot, talking to the backend via REST (`fetch()`)
+- **Build tool:** Maven (via the included Maven Wrapper — no local Maven install required)
+- **Version control:** Git/GitHub
+
+## Project Status
+
+Built incrementally, phase by phase. Current status: **Phase 2 — movie browsing and movie details complete.**
+
+| Phase | Description | Status |
+|---|---|---|
+| 0 | Project setup (this scaffold) | Done |
+| 1 | Database/data layer | Done |
+| 2 | Movie browsing and movie details | Done |
+| 3 | Authentication | Not started |
+| 4 | Booking and seat selection | Not started |
+| 5 | Customer account and booking history | Not started |
+| 6 | Admin functionality | Not started |
+| 7 | Testing, validation, error handling, cleanup | Not started |
+| 8 | Documentation polish | Not started |
+
+## Running the App
+
+First-time setup: copy `src/main/resources/application.properties.example` to
+`application.properties` (gitignored, since it holds a real DB password) and fill in your
+MySQL credentials.
+
+No local Maven install is needed — the Maven Wrapper (`mvnw`) downloads the exact Maven version
+the project expects.
+
+```
+# Windows
+mvnw.cmd spring-boot:run
+
+# macOS/Linux
+./mvnw spring-boot:run
+```
+
+Then open http://localhost:8080/Cinema.html in a browser.
+
+Requires a local MySQL server running on port 3306, with a database `ecinemax_db` and a user
+`ecinemax_app` matching the credentials in `application.properties`. On first startup, the
+`movies` and `showtimes` tables are created automatically and seeded with 15 sample movies.
+
+## Project Structure
+
+```
+src/main/java/com/ecinemax/
+    entity/       JPA entities (Movie, Showtime, ...) - map directly to database tables
+    repository/   Spring Data JPA repositories - data access, no implementation code needed
+    service/      Business logic, converts entities to DTOs
+    controller/   REST controllers - thin HTTP layer, delegates to services
+    dto/          Request/response shapes sent to the browser as JSON
+    config/       App configuration and startup logic (e.g. DataSeeder)
+src/main/resources/static/    The existing HTML/CSS/JS frontend, served directly by Spring Boot
+src/main/resources/application.properties   App configuration (datasource, JPA settings)
+pom.xml                       Maven build file and dependency list
+```
