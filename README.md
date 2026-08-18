@@ -16,7 +16,7 @@ and standard Spring Boot patterns over advanced abstractions.
 
 ## Project Status
 
-Built incrementally, phase by phase. Current status: **Phase 4 — booking and seat selection complete.**
+Built incrementally, phase by phase. Current status: **Phase 5 — customer account and booking history complete.**
 
 | Phase | Description | Status |
 |---|---|---|
@@ -25,7 +25,7 @@ Built incrementally, phase by phase. Current status: **Phase 4 — booking and s
 | 2 | Movie browsing and movie details | Done |
 | 3 | Authentication | Done |
 | 4 | Booking and seat selection | Done |
-| 5 | Customer account and booking history | Not started |
+| 5 | Customer account and booking history | Done |
 | 6 | Admin functionality | Not started |
 | 7 | Testing, validation, error handling, cleanup | Not started |
 | 8 | Documentation polish | Not started |

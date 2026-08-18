@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>E-Cinema</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+		<script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+		<link rel="stylesheet" type= "text/css" href="Registration.css">
+	</head>
+
+	<body>
+		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+			<a href="Cinema.html" class="navbar-brand">E-CinemaX</a>
+			<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarMenu">
+				<form class="form-inline ml-lg-5">
+					<input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-light my-2" type="submit"><i class="fas fa-search"></i></button>
+				</form>
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a href="Useraccount.html" class="nav-link"><i class="fas fa-user" style="margin-right: 10px"></i>ACCOUNT</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" class="nav-link" id="logoutLink">LOGOUT</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+	<div class="container-fluid my-container">
+			<div class="title"><br>MY BOOKINGS</div>
+			<br><hr><br>
+	</div>
+
+	<div class="container" style="max-width: 700px;">
+		<div id="bookingList"></div>
+	</div>
+
+	<div class="container-fluid my-container">
+		<br><hr><br>
+	</div>
+
+	<script src="js/auth.js"></script>
+	<script src="js/format.js"></script>
+	<script>
+		document.getElementById('logoutLink').addEventListener('click', (event) => {
+			event.preventDefault();
+			logout();
+		});
+
+		async function loadBookings() {
+			const user = await getCurrentUser();
+			if (!user) {
+				window.location.href = `Customerlogin.html?returnUrl=${encodeURIComponent(window.location.href)}`;
+				return;
+			}
+
+			const response = await fetch('/api/bookings/me');
+			const bookings = await response.json();
+
+			const list = document.getElementById('bookingList');
+			if (bookings.length === 0) {
+				list.innerHTML = '<p class="form-check-label">You haven\'t booked any tickets yet.</p>';
+				return;
+			}
+
+			list.innerHTML = bookings.map(booking => `
+				<div class="card mb-3">
+					<div class="card-body">
+						<h5 class="card-title">${booking.movieTitle}</h5>
+						<h6 class="card-subtitle mb-2 text-muted">${formatDate(booking.showDate)} at ${formatTime(booking.showTime)}</h6>
+						<p class="card-text">
+							Seats: ${booking.seatLabels.join(', ')}<br>
+							Status: <span class="badge ${booking.status === 'CONFIRMED' ? 'badge-success' : 'badge-secondary'}">${booking.status}</span><br>
+							Total: $${booking.total.toFixed(2)}
+						</p>
+						${booking.status === 'CONFIRMED'
+							? `<a href="tickets/Orderconfirmation.html?bookingId=${booking.id}" class="btn btn-primary btn-sm">View Receipt</a>`
+							: ''}
+					</div>
+				</div>`).join('');
+		}
+
+		loadBookings();
+	</script>
+	</body>
+</html>

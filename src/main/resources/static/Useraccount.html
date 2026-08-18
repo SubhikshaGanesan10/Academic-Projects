@@ -49,32 +49,40 @@
           <!-- Email input -->
           <div class="form-group required mb-4">
 			  <label class="form-check-label" ><b>First Name</b></label>
-            <input type="text" readonly placeholder="Edward" class="form-control required form-control-lg" />
+            <input type="text" readonly id="firstName" class="form-control required form-control-lg" />
 
           </div>
 
           <!-- Password input -->
           <div class="form-group  mb-4">
 			  <label class="form-check-label" ><b>Last Name</b></label>
-            <input type="text" readonly placeholder="Lee" class="form-control form-control-lg" />
+            <input type="text" readonly id="lastName" class="form-control form-control-lg" />
+
+          </div>
+
+			<div class="form-group mb-4">
+			  <label class="form-check-label" ><b>Email</b></label>
+            <input type="text" readonly id="email" class="form-control required form-control-lg" />
 
           </div>
 
 		    <div class="form-group mb-4">
 			  <label class="form-check-label" ><b>Date of Birth</b></label>
-            <input type="text" readonly placeholder="20/20/1990" class="form-control required form-control-lg" />
+            <input type="text" readonly id="dateOfBirth" class="form-control required form-control-lg" />
 
           </div>
 
 			<div class="form-group mb-4">
 			  <label class="form-check-label" ><b>Phone Number</b></label>
-            <input type="text" readonly placeholder="705-555-2233" class="form-control required form-control-lg" />
+            <input type="text" readonly id="phone" class="form-control required form-control-lg" />
 
           </div>
 
 
 
           <button type="submit" class="btn btn-primary btn-lg btn-block "><a style="text-decoration: none; color:white;"  href="Editprofile.html">Edit profile</a></button>
+          <br>
+          <button type="button" class="btn btn-primary btn-lg btn-block"><a style="text-decoration: none; color:white;" href="bookingHistory.html">My Bookings</a></button>
 
 
         </form>
@@ -88,6 +96,25 @@
 			event.preventDefault();
 			logout();
 		});
+
+		async function loadProfile() {
+			const user = await getCurrentUser();
+			if (!user) {
+				window.location.href = `Customerlogin.html?returnUrl=${encodeURIComponent(window.location.href)}`;
+				return;
+			}
+
+			const response = await fetch('/api/users/me');
+			const profile = await response.json();
+
+			document.getElementById('firstName').value = profile.firstName || '';
+			document.getElementById('lastName').value = profile.lastName || '';
+			document.getElementById('email').value = profile.email || '';
+			document.getElementById('dateOfBirth').value = profile.dateOfBirth || '';
+			document.getElementById('phone').value = profile.phone || '';
+		}
+
+		loadProfile();
 	</script>
 	</body>
 </html>
