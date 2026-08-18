@@ -11,6 +11,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.Version;
 
 // The live availability of one physical Seat for one specific Showtime. A
 // row exists here for every seat in the screen the moment a showtime is
@@ -38,6 +39,13 @@ public class ShowtimeSeat {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "booking_id")
     private Booking booking;
+
+    // Optimistic locking: Hibernate includes "AND version = ?" on every
+    // UPDATE and bumps this number each time. If two people try to book the
+    // same seat at the same instant, the second UPDATE affects zero rows and
+    // Hibernate throws instead of silently overwriting the first booking.
+    @Version
+    private Integer version;
 
     public ShowtimeSeat() {
     }

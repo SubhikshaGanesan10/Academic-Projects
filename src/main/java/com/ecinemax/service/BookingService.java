@@ -30,12 +30,15 @@ import com.ecinemax.repository.SeatRepository;
 import com.ecinemax.repository.ShowtimeRepository;
 import com.ecinemax.repository.ShowtimeSeatRepository;
 import com.ecinemax.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -52,6 +55,11 @@ public class BookingService {
     private final MovieRepository movieRepository;
     private final ScreenRepository screenRepository;
     private final SeatRepository seatRepository;
+
+    // How long a PENDING booking (reached checkout, never paid) holds its
+    // seats before PendingBookingCleanupTask releases them automatically.
+    @Value("${app.booking.pending-expiry-minutes:15}")
+    private int pendingExpiryMinutes;
 
     public BookingService(ShowtimeRepository showtimeRepository, ShowtimeSeatRepository showtimeSeatRepository,
                            BookingRepository bookingRepository, BookingItemRepository bookingItemRepository,
@@ -141,7 +149,17 @@ public class BookingService {
         for (ShowtimeSeat showtimeSeat : showtimeSeats) {
             showtimeSeat.setStatus(SeatStatus.BOOKED);
             showtimeSeat.setBooking(booking);
-            showtimeSeatRepository.save(showtimeSeat);
+        }
+
+        try {
+            // saveAllAndFlush forces the UPDATEs (and their version checks)
+            // to run right now, inside this try block - not deferred until
+            // the transaction commits, where we'd have no chance to catch
+            // and translate the failure into a clean response.
+            showtimeSeatRepository.saveAllAndFlush(showtimeSeats);
+        } catch (ObjectOptimisticLockingFailureException e) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT,
+                    "One of the selected seats was just booked by someone else. Please choose again.");
         }
 
         return toDto(booking);
@@ -190,6 +208,30 @@ public class BookingService {
                 .stream()
                 .map(this::toDto)
                 .toList();
+    }
+
+    // Called periodically by PendingBookingCleanupTask. A PENDING booking
+    // means someone reached checkout (which already marked their seats
+    // BOOKED) but never completed payment - without this, those seats would
+    // stay reserved forever.
+    @Transactional
+    public int cancelExpiredPendingBookings() {
+        LocalDateTime cutoff = LocalDateTime.now().minusMinutes(pendingExpiryMinutes);
+        List<Booking> expired = bookingRepository.findByStatusAndBookingDateTimeBefore(BookingStatus.PENDING, cutoff);
+
+        for (Booking booking : expired) {
+            List<ShowtimeSeat> seats = showtimeSeatRepository.findByBookingId(booking.getId());
+            for (ShowtimeSeat seat : seats) {
+                seat.setStatus(SeatStatus.AVAILABLE);
+                seat.setBooking(null);
+            }
+            showtimeSeatRepository.saveAll(seats);
+
+            booking.setStatus(BookingStatus.CANCELLED);
+            bookingRepository.save(booking);
+        }
+
+        return expired.size();
     }
 
     // Admin: schedule a new showtime and generate one AVAILABLE ShowtimeSeat
