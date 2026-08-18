@@ -10,7 +10,7 @@
 		<script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
 		<link rel="stylesheet" type= "text/css" href="managemovies.css">
 	</head>
-	
+
 	<body>
 		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
 			<a href="AdminMainPage.html" class="navbar-brand">E-CinemaX</a>
@@ -47,21 +47,17 @@
 			</div>
 		</nav>
 		<div class="container-fluid my-container">
-			<div class="movielist"><br>MOVIE LIST</div>
+			<div class="movielist"><br>USERS</div>
 			<br><hr><br>
 		</div>
 		<div class="container my-container">
-			<table class = "movies" id="movieTable">
-			</table>
-			<br>
-			<button class="addMovie"><a href= "addmovies.html">ADD MOVIE</a></button><br>
-			<button class="addMovie"><a href= "scheduleMovies.html">SCHEDULE MOVIE</a></button>
+			<table class = "movies" id="userTable"></table>
 		</div>
 		<div class="container-fluid my-container">
 			<br><hr><br>
 		</div>
-		
-		
+
+
 		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
 			crossorigin="anonymous"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
@@ -76,49 +72,41 @@
 				logout();
 			});
 
-			async function loadMovies() {
-				const [nowShowing, comingSoon] = await Promise.all([
-					fetch('/api/movies?status=NOW_SHOWING').then(r => r.json()),
-					fetch('/api/movies?status=COMING_SOON').then(r => r.json())
-				]);
+			async function loadUsers() {
+				const users = await fetch('/api/admin/users').then(r => r.json());
 
-				const table = document.getElementById('movieTable');
+				const table = document.getElementById('userTable');
 				table.innerHTML = `
-					<tr><th style="text-align: center; padding: 20px" colspan="2"><b><u>NOW SHOWING MOVIES</u></b></th></tr>
-					${nowShowing.map(movieRow).join('')}
-					<tr><th style="text-align: center; padding: 20px" colspan="2"><b><u>COMING SOON MOVIES</u></b></th></tr>
-					${comingSoon.map(movieRow).join('')}`;
+					<tr>
+						<th style="text-align: center; padding: 20px" colspan="4"><b><u>ALL USERS</u></b></th>
+					</tr>
+					${users.map(user => `
+						<tr>
+							<td>${user.firstName} ${user.lastName}</td>
+							<td>${user.email}</td>
+							<td>${user.role}</td>
+							<td>
+								<button class="removeMovie toggle-status" data-user-id="${user.id}" data-enabled="${user.enabled}">
+									${user.enabled ? 'Disable' : 'Enable'}
+								</button>
+							</td>
+						</tr>`).join('')}`;
 
-				table.querySelectorAll('.removeMovie').forEach(button => {
-					button.addEventListener('click', () => removeMovie(button.dataset.movieId, button.dataset.movieTitle));
+				table.querySelectorAll('.toggle-status').forEach(button => {
+					button.addEventListener('click', () => toggleStatus(button.dataset.userId, button.dataset.enabled === 'true'));
 				});
 			}
 
-			function movieRow(movie) {
-				return `
-					<tr>
-						<td>${movie.title}</td>
-						<td><button class="removeMovie" data-movie-id="${movie.id}" data-movie-title="${movie.title}">Remove</button></td>
-					</tr>`;
+			async function toggleStatus(userId, currentlyEnabled) {
+				await fetch(`/api/admin/users/${userId}/status`, {
+					method: 'PUT',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ enabled: !currentlyEnabled })
+				});
+				loadUsers();
 			}
 
-			async function removeMovie(movieId, movieTitle) {
-				if (!confirm(`Remove "${movieTitle}"? This cannot be undone.`)) {
-					return;
-				}
-
-				const response = await fetch(`/api/admin/movies/${movieId}`, { method: 'DELETE' });
-				if (!response.ok) {
-					alert(response.status === 409
-						? 'This movie has scheduled showtimes and cannot be removed.'
-						: 'Could not remove this movie.');
-					return;
-				}
-
-				loadMovies();
-			}
-
-			loadMovies();
+			loadUsers();
 		</script>
 	</body>
 </html>

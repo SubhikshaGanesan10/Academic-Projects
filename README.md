@@ -16,7 +16,7 @@ and standard Spring Boot patterns over advanced abstractions.
 
 ## Project Status
 
-Built incrementally, phase by phase. Current status: **Phase 5 — customer account and booking history complete.**
+Built incrementally, phase by phase. Current status: **Phase 6 — admin functionality complete.**
 
 | Phase | Description | Status |
 |---|---|---|
@@ -26,7 +26,7 @@ Built incrementally, phase by phase. Current status: **Phase 5 — customer acco
 | 3 | Authentication | Done |
 | 4 | Booking and seat selection | Done |
 | 5 | Customer account and booking history | Done |
-| 6 | Admin functionality | Not started |
+| 6 | Admin functionality | Done |
 | 7 | Testing, validation, error handling, cleanup | Not started |
 | 8 | Documentation polish | Not started |
 
@@ -54,7 +54,7 @@ Requires a local MySQL server running on port 3306, with a database `ecinemax_db
 database tables are created automatically and seeded with 15 sample movies plus a seeded admin
 account:
 
-- **Admin login:** `admin@ecinemax.com` / `Admin123!`
+- **Admin login:** `admin@ecinemax.com` / `Admin123!` — lands on `AdminMainPage.html`, with movie/showtime/promotion CRUD, user management (enable/disable), and a read-only view of every booking across all customers.
 - **Customer accounts:** created via the Registration page (`Registration.html`)
 
 Login uses server-side sessions (a cookie), not tokens - once logged in via `Customerlogin.html`,
@@ -71,9 +71,10 @@ Deliberately deferred, not forgotten:
 - **Forgot/reset password** — the link on `Customerlogin.html` is still a placeholder. Needs a
   reset-token flow and either a real or mocked email step; not core to the booking flow, so
   postponed until after the main phases are done (Phase 7 or its own small phase).
-- **Promo codes** — `checkout.html`'s promo code UI was removed rather than left non-functional
-  with a fake pre-applied discount (as it was in the original prototype). Real promo code
-  validation belongs with the rest of Promotion management in Phase 6.
+- **Promo codes aren't applied at checkout yet** — Phase 6 built real Promotion CRUD for admins
+  (`promotions.html`), but wiring `checkout.html` to actually validate and apply a promo code to
+  a booking's total is deferred to Phase 7 - it touches booking-total calculation, which was
+  intentionally kept out of Phase 6's scope to keep that phase to admin CRUD only.
 - **Seat booking concurrency** — two people selecting the same seat at the exact same moment is
   checked (the second one gets a 409), but there's no optimistic locking, so it's a "check then
   act" race rather than a fully atomic guarantee. Planned hardening for Phase 7.

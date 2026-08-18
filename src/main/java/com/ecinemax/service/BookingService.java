@@ -3,21 +3,30 @@ package com.ecinemax.service;
 import com.ecinemax.dto.BookingDto;
 import com.ecinemax.dto.BookingItemDto;
 import com.ecinemax.dto.CreateBookingRequest;
+import com.ecinemax.dto.CreateShowtimeRequest;
 import com.ecinemax.dto.PaymentRequest;
+import com.ecinemax.dto.ScreenDto;
 import com.ecinemax.dto.SeatDto;
 import com.ecinemax.dto.SeatMapDto;
+import com.ecinemax.dto.ShowtimeDto;
 import com.ecinemax.dto.TicketItemRequest;
 import com.ecinemax.dto.TicketTypeDto;
 import com.ecinemax.entity.AppUser;
 import com.ecinemax.entity.Booking;
 import com.ecinemax.entity.BookingItem;
 import com.ecinemax.entity.BookingStatus;
+import com.ecinemax.entity.Movie;
+import com.ecinemax.entity.Screen;
+import com.ecinemax.entity.Seat;
 import com.ecinemax.entity.SeatStatus;
 import com.ecinemax.entity.Showtime;
 import com.ecinemax.entity.ShowtimeSeat;
 import com.ecinemax.entity.TicketType;
 import com.ecinemax.repository.BookingItemRepository;
 import com.ecinemax.repository.BookingRepository;
+import com.ecinemax.repository.MovieRepository;
+import com.ecinemax.repository.ScreenRepository;
+import com.ecinemax.repository.SeatRepository;
 import com.ecinemax.repository.ShowtimeRepository;
 import com.ecinemax.repository.ShowtimeSeatRepository;
 import com.ecinemax.repository.UserRepository;
@@ -40,15 +49,22 @@ public class BookingService {
     private final BookingRepository bookingRepository;
     private final BookingItemRepository bookingItemRepository;
     private final UserRepository userRepository;
+    private final MovieRepository movieRepository;
+    private final ScreenRepository screenRepository;
+    private final SeatRepository seatRepository;
 
     public BookingService(ShowtimeRepository showtimeRepository, ShowtimeSeatRepository showtimeSeatRepository,
                            BookingRepository bookingRepository, BookingItemRepository bookingItemRepository,
-                           UserRepository userRepository) {
+                           UserRepository userRepository, MovieRepository movieRepository,
+                           ScreenRepository screenRepository, SeatRepository seatRepository) {
         this.showtimeRepository = showtimeRepository;
         this.showtimeSeatRepository = showtimeSeatRepository;
         this.bookingRepository = bookingRepository;
         this.bookingItemRepository = bookingItemRepository;
         this.userRepository = userRepository;
+        this.movieRepository = movieRepository;
+        this.screenRepository = screenRepository;
+        this.seatRepository = seatRepository;
     }
 
     public List<TicketTypeDto> getTicketTypes() {
@@ -173,6 +189,45 @@ public class BookingService {
         return bookingRepository.findByUserIdOrderByBookingDateTimeDesc(user.getId())
                 .stream()
                 .map(this::toDto)
+                .toList();
+    }
+
+    // Admin: schedule a new showtime and generate one AVAILABLE ShowtimeSeat
+    // row per seat in the chosen screen - the same pattern DataSeeder uses
+    // for the initial seed data.
+    @Transactional
+    public ShowtimeDto createShowtime(CreateShowtimeRequest request) {
+        Movie movie = movieRepository.findById(request.getMovieId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Movie not found"));
+        Screen screen = screenRepository.findById(request.getScreenId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Screen not found"));
+
+        Showtime showtime = showtimeRepository.save(new Showtime(movie, screen, request.getShowDate(), request.getShowTime()));
+
+        List<Seat> seats = seatRepository.findByScreenIdOrderByRowLabelAscSeatNumberAsc(screen.getId());
+        List<ShowtimeSeat> showtimeSeats = seats.stream()
+                .map(seat -> new ShowtimeSeat(showtime, seat, SeatStatus.AVAILABLE))
+                .toList();
+        showtimeSeatRepository.saveAll(showtimeSeats);
+
+        return new ShowtimeDto(showtime.getId(), showtime.getShowDate(), showtime.getShowTime());
+    }
+
+    public List<ScreenDto> getScreens() {
+        return screenRepository.findAll().stream()
+                .map(screen -> new ScreenDto(screen.getId(), screen.getName()))
+                .toList();
+    }
+
+    // Admin: every booking across every customer, newest first.
+    public List<BookingDto> getAllBookings() {
+        return bookingRepository.findAll().stream()
+                .sorted((a, b) -> b.getBookingDateTime().compareTo(a.getBookingDateTime()))
+                .map(booking -> {
+                    BookingDto dto = toDto(booking);
+                    dto.setCustomerName(booking.getUser().getFirstName() + " " + booking.getUser().getLastName());
+                    return dto;
+                })
                 .toList();
     }
 

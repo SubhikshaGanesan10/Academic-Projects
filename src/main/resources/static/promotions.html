@@ -24,7 +24,7 @@
 				</form>
 				<ul class="navbar-nav mr-auto">
 					<li class="nav-item">
-						<a href="#" class="nav-link" style = "margin-left: 35px">USERS</a>
+						<a href="manageUsers.html" class="nav-link" style = "margin-left: 35px">USERS</a>
 					</li>
 					<li class="nav-item">
 						<a href="managemovies.html" class="nav-link">MANAGE MOVIES</a>
@@ -32,66 +32,53 @@
 					<li class="nav-item">
 						<a href="promotions.html" class="nav-link">PROMOTIONS</a>
 					</li>
+					<li class="nav-item">
+						<a href="manageBookings.html" class="nav-link">BOOKINGS</a>
+					</li>
 				</ul>
 				<ul class="navbar-nav ml-auto">
 					<li class="nav-item">
 						<a href="#" class="nav-link">ADMIN ACCOUNT</a>
 					</li>
 					<li class="nav-item">
-						<a href="#" class="nav-link">LOGOUT</a>
+						<a href="#" class="nav-link" id="logoutLink">LOGOUT</a>
 					</li>
 				</ul>
-			</div>         
+			</div>
 		</nav>
 		<div class="container-fluid my-container">
 			<div class="promotionTitle"><br>AVAILABLE PROMOTIONS</div>
 			<br><hr><br>
 		</div>
 		<div class="container my-container">
-			<table class = "movies">
-				<tr>
-					<td>Fall Special</td>
-					<td><button class = "removePromotion">Remove</button></td>
-				</tr>
-				<tr>
-					<td>Halloween Treat</td>
-					<td><button class = "removePromotion">Remove</button></td>
-				</tr>
-				<tr>
-					<td>Seasonal Promotion</td>
-					<td><button class = "removePromotion">Remove</button></td>
-				</tr>
-			</table>
+			<table class = "movies" id="promotionTable"></table>
 			<br>
 		</div>
 		<div class="container-fluid my-container">
 			<br><hr><br>
 		</div>
-		<div>
-			<button class="addPromotions">ADD NEW PROMOTION</button>
-		</div>
 		<br>
 		<div class="container my-container">
-			<form class = "movieForm" action="promotions.html">
+			<form class = "movieForm" id="addPromotionForm">
 				<table>
 					<tr>
 						<td><label class ="formLabel" for="pname">Promotion Name</label></td>
-						<td><input type="text" id="pname" placeholder= "Enter Promo Name" name="pname" value=""></td>
+						<td><input type="text" id="pname" placeholder= "Enter Promo Name" required></td>
 					</tr>
 					<tr>
 						<td><label class ="formLabel" for="code">Promo Code:</label></td>
-						<td><input type="text" id="code" placeholder= "Promo Code" name="code" value=""></td>
+						<td><input type="text" id="code" placeholder= "Promo Code" required></td>
 					</tr>
 					<tr>
 						<td><label class ="formLabel" for="discount">Discount:</label></td>
-						<td><input type="number" id="discount" placeholder= "Enter Discount(%)" name="discount" value=""></td>
+						<td><input type="number" id="discount" min="1" max="100" placeholder= "Enter Discount(%)" required></td>
 					</tr>
 					<tr>
-						<td><input class = "button" type="submit" value="Cancel"></td>
+						<td><input class = "button" type="button" id="cancelButton" value="Cancel"></td>
 						<td style = "text-align: center; justify-content: center; display:flex;"><input class = "button" type="submit" value="Add"></td>
 					</tr>
 				</table>
-			</form> 
+			</form>
 		</div>
 		<div class="container-fluid my-container">
 			<br><hr><br>
@@ -104,5 +91,65 @@
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
 			crossorigin="anonymous"></script>
 		<script src="myScript.js"></script>
+		<script src="js/auth.js"></script>
+		<script>
+			document.getElementById('logoutLink').addEventListener('click', (event) => {
+				event.preventDefault();
+				logout();
+			});
+
+			document.getElementById('cancelButton').addEventListener('click', () => {
+				document.getElementById('addPromotionForm').reset();
+			});
+
+			async function loadPromotions() {
+				const promotions = await fetch('/api/admin/promotions').then(r => r.json());
+
+				const table = document.getElementById('promotionTable');
+				if (promotions.length === 0) {
+					table.innerHTML = '<tr><td>No promotions yet.</td></tr>';
+					return;
+				}
+
+				table.innerHTML = promotions.map(promo => `
+					<tr>
+						<td>${promo.name} (${promo.code}, ${promo.discountPercent}% off)</td>
+						<td><button class="removePromotion" data-promo-id="${promo.id}">Remove</button></td>
+					</tr>`).join('');
+
+				table.querySelectorAll('.removePromotion').forEach(button => {
+					button.addEventListener('click', () => removePromotion(button.dataset.promoId));
+				});
+			}
+
+			async function removePromotion(id) {
+				await fetch(`/api/admin/promotions/${id}`, { method: 'DELETE' });
+				loadPromotions();
+			}
+
+			document.getElementById('addPromotionForm').addEventListener('submit', async (event) => {
+				event.preventDefault();
+
+				const response = await fetch('/api/admin/promotions', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						name: document.getElementById('pname').value,
+						code: document.getElementById('code').value,
+						discountPercent: Number(document.getElementById('discount').value)
+					})
+				});
+
+				if (!response.ok) {
+					alert('Could not add this promotion. Please check the fields and try again.');
+					return;
+				}
+
+				document.getElementById('addPromotionForm').reset();
+				loadPromotions();
+			});
+
+			loadPromotions();
+		</script>
 	</body>
 </html>

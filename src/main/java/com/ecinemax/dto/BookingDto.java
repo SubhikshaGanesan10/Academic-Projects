@@ -9,14 +9,16 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
-// Used by both checkout.html (before payment) and Orderconfirmation.html
-// (after payment) - the only difference is whether the payment fields are
-// filled in yet.
+// Used by checkout.html (before payment), Orderconfirmation.html (after
+// payment), bookingHistory.html, and the admin all-bookings view - the only
+// difference is whether the payment fields are filled in yet, and whether
+// customerName is populated (only the admin listing needs it).
 public class BookingDto {
 
     private Long id;
     private String bookingReference;
     private BookingStatus status;
+    private String customerName;
 
     private String movieTitle;
     private LocalDate showDate;
@@ -54,6 +56,14 @@ public class BookingDto {
 
     public void setStatus(BookingStatus status) {
         this.status = status;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public String getMovieTitle() {
