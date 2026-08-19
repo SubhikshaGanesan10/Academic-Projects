@@ -19,19 +19,19 @@ This was built as my Master's Project (CSCI 7200, University of Georgia, Spring 
 
 | Registration | Login | Dashboard |
 |---|---|---|
-| ![Registration](docs/screenshots/registration.png) | ![Login](docs/screenshots/login.png) | ![Dashboard](docs/screenshots/dashboard.png) |
+| <img src="docs/screenshots/registration.png" width="220"> | <img src="docs/screenshots/login.png" width="220"> | <img src="docs/screenshots/dashboard.png" width="220"> |
 
 | Receiver Verification | Post a Donation | Browse Donations |
 |---|---|---|
-| ![Receiver Verification](docs/screenshots/receiver_verification.jpeg) | ![Post Donation](docs/screenshots/post_donation.png) | ![Browse Donations](docs/screenshots/browse_donations.png) |
+| <img src="docs/screenshots/receiver_verification.jpeg" width="220"> | <img src="docs/screenshots/post_donation.png" width="220"> | <img src="docs/screenshots/browse_donations.png" width="220"> |
 
 | Donor's Posted Donations | Donor's Accepted Donations | Chat |
 |---|---|---|
-| ![Donor Posted Donations](docs/screenshots/donor_posted_donations.png) | ![Donor Accepted Donations](docs/screenshots/donor_accepted_donations.png) | ![Chat](docs/screenshots/chat.png) |
+| <img src="docs/screenshots/donor_posted_donations.png" width="220"> | <img src="docs/screenshots/donor_accepted_donations.png" width="220"> | <img src="docs/screenshots/chat.png" width="220"> |
 
 | Profile | About Us | Contact Us |
 |---|---|---|
-| ![Profile](docs/screenshots/profile.png) | ![About Us](docs/screenshots/about_us.png) | ![Contact Us](docs/screenshots/contact_us.png) |
+| <img src="docs/screenshots/profile.png" width="220"> | <img src="docs/screenshots/about_us.png" width="220"> | <img src="docs/screenshots/contact_us.png" width="220"> |
 
 ## App Flow
 
