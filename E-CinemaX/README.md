@@ -151,23 +151,6 @@ under `/api/**` requires login, and `/api/admin/**` requires the ADMIN role (enf
 | | `GET /api/admin/users`, `PUT /api/admin/users/{id}/status` | User management |
 | | `GET /api/admin/bookings` | All bookings (oversight) |
 
-## Known Gaps / Backlog
-
-Deliberately deferred, not forgotten:
-
-- **Forgot/reset password** — the link on `Customerlogin.html` is still a placeholder. Would need
-  a reset-token flow and either a real or mocked email step; not core to the booking flow, so
-  left out to keep the auth scope simple.
-- **Promo codes aren't applied at checkout yet** — Promotion CRUD exists for admins
-  (`promotions.html`), but wiring `checkout.html` to actually validate and apply a promo code to
-  a booking's total was left out - it touches booking-total calculation, which was kept separate
-  from admin CRUD on purpose.
-
-Resolved in Phase 7 (kept here briefly for context, since they were open when Phase 6 shipped):
-seat-booking concurrency now uses optimistic locking (`ShowtimeSeat.version`) instead of a plain
-check-then-act race, and abandoned `PENDING` bookings are auto-cancelled and their seats released
-by a scheduled job (`PendingBookingCleanupTask`, every 5 minutes, 15-minute expiry).
-
 ## Project Structure
 
 ```
