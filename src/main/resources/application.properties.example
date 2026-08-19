@@ -11,10 +11,11 @@ spring.datasource.url=jdbc:mysql://localhost:3306/ecinemax_db
 spring.datasource.username=ecinemax_app
 spring.datasource.password=CHANGE_ME
 
-# Hibernate: automatically create/update tables to match our @Entity classes.
-# Fine for local development; Flyway migrations replace this in a later phase
-# once the schema stabilizes.
-spring.jpa.hibernate.ddl-auto=update
+# Flyway (src/main/resources/db/migration/) now owns the schema. Hibernate
+# just checks on startup that the tables actually match our @Entity classes
+# and refuses to boot if they've drifted apart - it no longer changes
+# anything itself.
+spring.jpa.hibernate.ddl-auto=validate
 
 # Prints the actual SQL Hibernate generates to the console - useful for
 # seeing exactly what JPA is doing under the hood while learning.

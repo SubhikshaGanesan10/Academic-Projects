@@ -16,7 +16,7 @@ and standard Spring Boot patterns over advanced abstractions.
 
 ## Project Status
 
-Built incrementally, phase by phase. Current status: **Phase 6 — admin functionality complete.**
+Built incrementally, phase by phase. Current status: **Phase 7 — testing, validation, error handling, and cleanup complete.**
 
 | Phase | Description | Status |
 |---|---|---|
@@ -27,7 +27,7 @@ Built incrementally, phase by phase. Current status: **Phase 6 — admin functio
 | 4 | Booking and seat selection | Done |
 | 5 | Customer account and booking history | Done |
 | 6 | Admin functionality | Done |
-| 7 | Testing, validation, error handling, cleanup | Not started |
+| 7 | Testing, validation, error handling, cleanup | Done |
 | 8 | Documentation polish | Not started |
 
 ## Running the App
@@ -50,9 +50,9 @@ mvnw.cmd spring-boot:run
 Then open http://localhost:8080/Cinema.html in a browser.
 
 Requires a local MySQL server running on port 3306, with a database `ecinemax_db` and a user
-`ecinemax_app` matching the credentials in `application.properties`. On first startup, the
-database tables are created automatically and seeded with 15 sample movies plus a seeded admin
-account:
+`ecinemax_app` matching the credentials in `application.properties`. On first startup, Flyway
+creates all tables from `src/main/resources/db/migration/V1__init.sql`, and the app seeds 15
+sample movies plus an admin account:
 
 - **Admin login:** `admin@ecinemax.com` / `Admin123!` — lands on `AdminMainPage.html`, with movie/showtime/promotion CRUD, user management (enable/disable), and a read-only view of every booking across all customers.
 - **Customer accounts:** created via the Registration page (`Registration.html`)
@@ -73,15 +73,13 @@ Deliberately deferred, not forgotten:
   postponed until after the main phases are done (Phase 7 or its own small phase).
 - **Promo codes aren't applied at checkout yet** — Phase 6 built real Promotion CRUD for admins
   (`promotions.html`), but wiring `checkout.html` to actually validate and apply a promo code to
-  a booking's total is deferred to Phase 7 - it touches booking-total calculation, which was
-  intentionally kept out of Phase 6's scope to keep that phase to admin CRUD only.
-- **Seat booking concurrency** — two people selecting the same seat at the exact same moment is
-  checked (the second one gets a 409), but there's no optimistic locking, so it's a "check then
-  act" race rather than a fully atomic guarantee. Planned hardening for Phase 7.
-- **Abandoned checkouts don't release seats** — if someone reaches `checkout.html` (creating a
-  PENDING booking, which marks seats BOOKED) and never pays, those seats stay reserved
-  indefinitely. A real system would expire PENDING bookings after a few minutes; deferred to
-  Phase 7.
+  a booking's total is still deferred - it touches booking-total calculation, which was
+  intentionally kept out of Phase 6's admin-CRUD-only scope.
+
+Resolved in Phase 7 (kept here briefly for context, since they were open when Phase 6 shipped):
+seat-booking concurrency now uses optimistic locking (`ShowtimeSeat.version`) instead of a plain
+check-then-act race, and abandoned `PENDING` bookings are auto-cancelled and their seats released
+by a scheduled job (`PendingBookingCleanupTask`, every 5 minutes, 15-minute expiry).
 
 ## Project Structure
 
@@ -94,6 +92,8 @@ src/main/java/com/ecinemax/
     dto/          Request/response shapes sent to the browser as JSON
     config/       App configuration and startup logic (e.g. DataSeeder)
     security/     Spring Security config and the UserDetailsService bridge to AppUser
+    exception/    GlobalExceptionHandler - turns validation/service errors into clean JSON
+src/main/resources/db/migration/   Flyway migration scripts (V1__init.sql, ...) - the schema
 src/main/resources/static/    The existing HTML/CSS/JS frontend, served directly by Spring Boot
 src/main/resources/application.properties   App configuration (datasource, JPA settings)
 pom.xml                       Maven build file and dependency list
