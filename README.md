@@ -4,6 +4,39 @@ An online movie ticket booking system, rebuilt from a static HTML/CSS/JS prototy
 full-stack Java application. This is a learning/portfolio project — the code favors clarity
 and standard Spring Boot patterns over advanced abstractions.
 
+## Screenshots
+
+### Customer Experience
+
+**Home page** — browse Now Showing and Coming Soon movies
+
+![Home page](docs/screenshots/01-home-hero.png)
+![Now Showing grid](docs/screenshots/02-home-now-showing.png)
+
+**Movie details** — trailer, description, and live showtimes pulled from the database
+
+![Movie details - trailer](docs/screenshots/03-movie-details-trailer.png)
+![Movie details - showtimes](docs/screenshots/04-movie-details-showtimes.png)
+
+**Booking flow** — pick ticket quantities, select seats on a real seat map, check out, and get a confirmed receipt
+
+![Ticket quantities](docs/screenshots/05-buytickets-quantities.png)
+![Seat selection](docs/screenshots/06-buytickets-seatmap.png)
+![Checkout - billing](docs/screenshots/07-checkout-billing.png)
+![Checkout - mock payment](docs/screenshots/08-checkout-payment.png)
+![Order confirmation](docs/screenshots/09-order-confirmation.png)
+
+**Account** — profile and booking history
+
+![User account](docs/screenshots/10-user-account.png)
+![Booking history](docs/screenshots/11-booking-history.png)
+
+### Admin Experience
+
+![Admin dashboard](docs/screenshots/12-admin-dashboard.png)
+![Manage movies](docs/screenshots/13-admin-manage-movies.png)
+![Manage users](docs/screenshots/14-admin-manage-users.png)
+
 ## Tech Stack
 
 - **Backend:** Java 17, Spring Boot 4.1.0, Spring MVC / REST
