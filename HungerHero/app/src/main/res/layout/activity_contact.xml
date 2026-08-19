@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    tools:context=".Contact">
+
+    <TextView
+        android:id="@+id/textTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Contact Us"
+        android:textColor="#FFFFFF"
+        android:fontFamily="@font/indie_flower_font_family"
+        android:textStyle="bold"
+        android:textSize="40sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="32dp"/>
+
+    <TextView
+        android:id="@+id/textDescription"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Have a question or feedback? We'd love to hear from you."
+        android:textColor="#FFFFFF"
+        android:textSize="16sp"
+        android:fontFamily="@font/indie_flower_font_family"
+        app:layout_constraintTop_toBottomOf="@id/textTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"/>
+
+    <LinearLayout
+        android:id="@+id/emailRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/textDescription"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="40dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/email"
+            app:tint="#eba937"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="contact@hungerhero.com"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:fontFamily="@font/indie_flower_font_family"
+            android:layout_marginStart="12dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/phoneRow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toBottomOf="@id/emailRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="20dp">
+
+        <ImageView
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/phone"
+            app:tint="#eba937"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="+1 (555) 123-4567"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:fontFamily="@font/indie_flower_font_family"
+            android:layout_marginStart="12dp"/>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/textFollowUs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Follow Us"
+        android:textColor="#FFFFFF"
+        android:textStyle="bold"
+        android:fontFamily="@font/indie_flower_font_family"
+        android:textSize="18sp"
+        app:layout_constraintTop_toBottomOf="@id/phoneRow"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="40dp"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/textFollowUs"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp">
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="24dp"
+            android:src="@drawable/ic_facebook"
+            app:tint="#eba937"/>
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="24dp"
+            android:src="@drawable/ic_instagram"
+            app:tint="#eba937"/>
+
+        <ImageView
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_twitter"
+            app:tint="#eba937"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
