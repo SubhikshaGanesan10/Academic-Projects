@@ -8,16 +8,16 @@ This repository contains a variety of projects I've worked on, spanning mobile a
 ## 📂 Project Structure
 
 ```bash
-/Food-Donation-App/README.md  
+/HungerHero/README.md  
 /Ride-Sharing-App/README.md  
 /E-CinemaX/README.md
 ```
 
 ## 🌟 Projects
 
-1. Food Donation App
+1. HungerHero (Food Donation App)
 
-Tech Stack: Java, Android Studio, FirebaseA mobile application that connects food donors with nearby charities, helping to reduce food waste and support those in need.
+Tech Stack: Java, Android Studio, Firebase Authentication, Firebase Realtime Database. An Android app connecting people with surplus food to organizations and individuals facing food insecurity, with donor/receiver roles, an accept-and-confirm flow, and in-app chat to coordinate pickup. Built as a Master's project (CSCI 7200, University of Georgia). See [HungerHero/README.md](HungerHero/README.md) for screenshots and setup instructions, or [download the APK](https://github.com/SubhikshaGanesan10/Projects/releases/tag/hungerhero-v1.0) directly.
 
 2. Ride Sharing App
 
