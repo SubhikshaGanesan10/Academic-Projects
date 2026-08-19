@@ -15,17 +15,11 @@ This repository contains a variety of projects I've worked on, spanning mobile a
 
 ## 🌟 Projects
 
-1. HungerHero (Food Donation App)
+1. **HungerHero (Food Donation App)** — Tech Stack: Java, Android Studio, Firebase Authentication, Firebase Realtime Database. An Android app connecting people with surplus food to organizations and individuals facing food insecurity, with donor/receiver roles, an accept-and-confirm flow, and in-app chat to coordinate pickup. Built as a Master's project (CSCI 7200, University of Georgia). See [HungerHero/README.md](HungerHero/README.md) for screenshots and setup instructions, or [download the APK](https://github.com/SubhikshaGanesan10/Projects/releases/tag/hungerhero-v1.0) directly.
 
-Tech Stack: Java, Android Studio, Firebase Authentication, Firebase Realtime Database. An Android app connecting people with surplus food to organizations and individuals facing food insecurity, with donor/receiver roles, an accept-and-confirm flow, and in-app chat to coordinate pickup. Built as a Master's project (CSCI 7200, University of Georgia). See [HungerHero/README.md](HungerHero/README.md) for screenshots and setup instructions, or [download the APK](https://github.com/SubhikshaGanesan10/Projects/releases/tag/hungerhero-v1.0) directly.
+2. **Ride Sharing App** — Tech Stack: Java, Android Studio, Google Firebase. A user-friendly app for carpooling, allowing users to share rides, split costs, and reduce carbon footprints.
 
-2. Ride Sharing App
-
-Tech Stack: Java, Android Studio, Google Firebase user-friendly app for carpooling, allowing users to share rides, split costs, and reduce carbon footprints.
-
-3. E-CinemaX (E-Cinema Booking System)
-
-Tech Stack: Java, Spring Boot, Spring Security, Spring Data JPA/Hibernate, MySQL, HTML/CSS/JavaScript. A full-stack movie ticket booking system with real seat selection, mock payment, customer accounts and booking history, and a complete admin portal (movies, showtimes, promotions, users, bookings). See [E-CinemaX/README.md](E-CinemaX/README.md) for screenshots, architecture, and full setup instructions.
+3. **E-CinemaX (E-Cinema Booking System)** — Tech Stack: Java, Spring Boot, Spring Security, Spring Data JPA/Hibernate, MySQL, HTML/CSS/JavaScript. A full-stack movie ticket booking system with real seat selection, mock payment, customer accounts and booking history, and a complete admin portal (movies, showtimes, promotions, users, bookings). See [E-CinemaX/README.md](E-CinemaX/README.md) for screenshots, architecture, and full setup instructions.
 
 ## 🚧 How to Use
 
