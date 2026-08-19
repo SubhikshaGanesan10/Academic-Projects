@@ -23,7 +23,7 @@ Tech Stack: Java, Android Studio, Firebase Authentication, Firebase Realtime Dat
 
 Tech Stack: Java, Android Studio, Google Firebase user-friendly app for carpooling, allowing users to share rides, split costs, and reduce carbon footprints.
 
-3. E-CinemaX
+3. E-CinemaX (E-Cinema Booking System)
 
 Tech Stack: Java, Spring Boot, Spring Security, Spring Data JPA/Hibernate, MySQL, HTML/CSS/JavaScript. A full-stack movie ticket booking system with real seat selection, mock payment, customer accounts and booking history, and a complete admin portal (movies, showtimes, promotions, users, bookings). See [E-CinemaX/README.md](E-CinemaX/README.md) for screenshots, architecture, and full setup instructions.
 
