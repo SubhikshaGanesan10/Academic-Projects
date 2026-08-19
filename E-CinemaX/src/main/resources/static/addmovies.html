@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>E-CinemaX</title>
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+		<script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+		<link rel="stylesheet" type= "text/css" href="addMovies.css">
+	</head>
+	
+	<body>
+		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+			<a href="AdminMainPage.html" class="navbar-brand">E-CinemaX</a>
+			<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarMenu">
+				<form class="form-inline ml-lg-5">
+					<input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-light my-2" type="submit"><i class="fas fa-search"></i></button>
+				</form>
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a href="manageUsers.html" class="nav-link" style = "margin-left: 35px">USERS</a>
+					</li>
+					<li class="nav-item">
+						<a href="managemovies.html" class="nav-link">MANAGE MOVIES</a>
+					</li>
+					<li class="nav-item">
+						<a href="promotions.html" class="nav-link">PROMOTIONS</a>
+					</li>
+					<li class="nav-item">
+						<a href="manageBookings.html" class="nav-link">BOOKINGS</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a href="#" class="nav-link">ADMIN ACCOUNT</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" class="nav-link" id="logoutLink">LOGOUT</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="container-fluid my-container">
+			<div class="addmovies"><br>ADD MOVIE</div>
+			<br><hr><br>
+		</div>
+		<div class="container my-container">
+			<form class = "movieForm" id="addMovieForm">
+				<table>
+					<tr>
+						<td><label class ="formLabel" for="mname">Movie Title:</label></td>
+						<td><input type="text" id="mname" placeholder= "Enter Movie Title" required></td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="genre">Genre:</label></td>
+						<td><input type="text" id="genre" placeholder= "Enter Genre"></td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="duration">Duration:</label></td>
+						<td><input type="number" id="duration" placeholder= "Enter Duration(mins)"></td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="date">Release Date:</label></td>
+						<td><input type="date" id="date" placeholder= "Enter Release Date"></td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="cast">Cast:</label></td>
+						<td><input type="text" id="cast" placeholder= "Enter Cast"></td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="director">Director:</label></td>
+						<td><input type="text" id="director" placeholder= "Enter Director"></td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="producer">Producer:</label></td>
+						<td><input type="text" id="producer" placeholder= "Enter Producer"></td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="description">Description:</label></td>
+						<td><input type="text" id="description" placeholder= "Enter Description"></td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="rating">Rating:</label></td>
+						<td><input type="number" step="0.1" min="0" max="10" id="rating" placeholder= "Add Rating (out of 10)"></td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="trailer">Trailer (YouTube video ID):</label></td>
+						<td><input type="text" id="trailer" placeholder= "e.g. eHp3MbsCbMg"></td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="image">Poster Image URL:</label></td>
+						<td><input type="text" id="image" placeholder= "/posters/example_poster.jpg"></td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="category">Category:</label></td>
+						<td><select id="category" required>
+							<option value="">select...</option>
+							<option value="NOW_SHOWING">Now Showing Movie</option>
+							<option value="COMING_SOON">Coming Soon Movie</option>
+						</select></td>
+					</tr>
+				</table>
+				<div id="addMovieError" class="alert alert-danger" style="display: none; margin: 20px auto; max-width: 500px;"></div>
+				<br>
+				<div class="container my-container btn">
+					<button type="button" class="submitButton" id="cancelButton">Cancel</button>
+					<button type="submit" class="submitButton">Add</button>
+				</div>
+			</form>
+		</div>
+		<div class="container-fluid my-container">
+			<br><hr><br>
+		</div>
+		
+		
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+			crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+			crossorigin="anonymous"></script>
+		<script src="myScript.js"></script>
+		<script src="js/auth.js"></script>
+		<script>
+			document.getElementById('logoutLink').addEventListener('click', (event) => {
+				event.preventDefault();
+				logout();
+			});
+
+			document.getElementById('cancelButton').addEventListener('click', () => {
+				window.location.href = 'managemovies.html';
+			});
+
+			document.getElementById('addMovieForm').addEventListener('submit', async (event) => {
+				event.preventDefault();
+
+				const errorBox = document.getElementById('addMovieError');
+				errorBox.style.display = 'none';
+
+				const response = await fetch('/api/admin/movies', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						title: document.getElementById('mname').value,
+						genre: document.getElementById('genre').value,
+						durationMinutes: Number(document.getElementById('duration').value) || null,
+						releaseDate: document.getElementById('date').value || null,
+						cast: document.getElementById('cast').value,
+						director: document.getElementById('director').value,
+						producer: document.getElementById('producer').value,
+						description: document.getElementById('description').value,
+						rating: Number(document.getElementById('rating').value) || null,
+						youtubeTrailerId: document.getElementById('trailer').value,
+						posterUrl: document.getElementById('image').value,
+						status: document.getElementById('category').value
+					})
+				});
+
+				if (!response.ok) {
+					errorBox.textContent = 'Could not add this movie. Please check the fields and try again.';
+					errorBox.style.display = 'block';
+					return;
+				}
+
+				window.location.href = 'managemovies.html';
+			});
+		</script>
+	</body>
+</html>

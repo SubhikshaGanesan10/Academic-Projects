@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>E-CinemaX</title>
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+		<script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+		<link rel="stylesheet" type="text/css" href="descriptionstyle.css">
+	</head>
+
+	<body>
+		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+			<a href="Cinema.html" class="navbar-brand">E-CinemaX</a>
+			<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarMenu">
+				<form class="form-inline ml-lg-5">
+					<input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-light my-2" type="submit"><i class="fas fa-search"></i></button>
+				</form>
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a href="Customerlogin.html" data-toggle="tooltip" title="Login" class="nav-link"><i class="fas fa-user"></i> <span class="sr-only">LOGIN</span></a>
+					</li>
+					<li class="nav-item">
+						<a href="Registration.html" class="nav-link">SIGN UP</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+	<div class="container-fluid my-container">
+		<br>
+		<h2 class="header"><hr class="mainHR"><span id="movieTitle"></span><hr class="mainHR"></h2>
+		<br>
+		<table>
+			<tr>
+				<td style="padding-right: 50px;">
+					<img id="moviePoster" width="300px" height="425px" src="" alt="">
+				</td>
+				<td style="padding-left: 50px;">
+					<iframe id="movieTrailer" width="700" height="425" src="" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+				</td>
+			</tr>
+		</table>
+		<br><hr class="mainHR"><br>
+	</div>
+	<div class="container my-container">
+		<table>
+			<tr>
+				<td style="width: 35%; display: inline;" class="movie-description"><b>GENRE: </b> <span id="movieGenre"></span></td>
+				<td rowspan="2" style="width: 62%" class="movie-description">
+					<b>DESCRIPTION:</b><br><br><span id="movieDescription"></span>
+				</td>
+			</tr>
+		  <tr>
+			<td style="width: 35%; display: inline;" class="movie-description">
+				<button style="background: gold; color: black; border-radius: 5px;"><b>RATING:</b> <span id="movieRating"></span>/10</button>
+			</td>
+		  </tr>
+		</table>
+	</div>
+	<div class="container-fluid my-container">
+		<br><hr class="mainHR"><br>
+	</div>
+	<div class="container my-container">
+		<section>
+			<div style="text-align: center;"><button class="showTimeheader">SHOW TIMINGS</button></div>
+			<br><br>
+			<div id="showtimesContainer"></div>
+		</section>
+	</div>
+	<div class="container-fluid my-container">
+		<br><hr class="mainHR"><br>
+	</div>
+
+
+
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+				crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+				crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+				crossorigin="anonymous"></script>
+		<script src="myScript.js"></script>
+		<script src="js/format.js"></script>
+
+		<script>
+			const params = new URLSearchParams(window.location.search);
+			const movieId = params.get('id');
+
+			async function loadMovieDetails() {
+				const movieResponse = await fetch(`/api/movies/${movieId}`);
+				if (!movieResponse.ok) {
+					document.querySelector('.container-fluid.my-container').innerHTML = '<h2 class="header">Movie not found</h2>';
+					return;
+				}
+				const movie = await movieResponse.json();
+
+				document.title = movie.title + ' - E-Cinema';
+				document.getElementById('movieTitle').textContent = movie.title.toUpperCase();
+				document.getElementById('moviePoster').src = movie.posterUrl;
+				document.getElementById('moviePoster').alt = movie.title;
+				document.getElementById('movieGenre').textContent = movie.genre;
+				document.getElementById('movieDescription').textContent = movie.description;
+				document.getElementById('movieRating').textContent = movie.rating;
+
+				const trailerFrame = document.getElementById('movieTrailer');
+				if (movie.youtubeTrailerId) {
+					trailerFrame.src = `https://www.youtube.com/embed/${movie.youtubeTrailerId}`;
+				} else {
+					trailerFrame.outerHTML = '<div class="movie-description">Trailer not available.</div>';
+				}
+
+				const showtimesResponse = await fetch(`/api/movies/${movieId}/showtimes`);
+				renderShowtimes(await showtimesResponse.json());
+			}
+
+			function renderShowtimes(showtimes) {
+				const container = document.getElementById('showtimesContainer');
+
+				if (showtimes.length === 0) {
+					container.innerHTML = '<div class="showdate">No showtimes scheduled yet.</div>';
+					return;
+				}
+
+				// Group showtimes by date, so each date gets its own header
+				// and row of time buttons, same as the original static page.
+				const showtimesByDate = {};
+				showtimes.forEach(st => {
+					if (!showtimesByDate[st.showDate]) {
+						showtimesByDate[st.showDate] = [];
+					}
+					showtimesByDate[st.showDate].push(st);
+				});
+
+				container.innerHTML = Object.keys(showtimesByDate).map(date => `
+					<div class="showdate">${formatDate(date)}</div>
+					<hr class="showtimeHR">
+					<br>
+					<div class="row justify-content-between">
+						${showtimesByDate[date].map(st => `
+							<div class="col-md-2 my-col">
+								<div class="poster-title"><a href="tickets/buytickets.html?showtimeId=${st.id}" style="color: white; background: black; padding: 10px; border-radius: 5px;">${formatTime(st.showTime)}</a></div>
+							</div>`).join('')}
+					</div>
+					<br><br>`).join('');
+			}
+
+			loadMovieDetails();
+		</script>
+
+	</body>
+</html>

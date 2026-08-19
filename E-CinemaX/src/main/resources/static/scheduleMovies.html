@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>E-CinemaX</title>
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+		<script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+		<link rel="stylesheet" type= "text/css" href="addMovies.css">
+	</head>
+	
+	<body>
+		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+			<a href="AdminMainPage.html" class="navbar-brand">E-CinemaX</a>
+			<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarMenu">
+				<form class="form-inline ml-lg-5">
+					<input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-light my-2" type="submit"><i class="fas fa-search"></i></button>
+				</form>
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a href="manageUsers.html" class="nav-link" style = "margin-left: 35px">USERS</a>
+					</li>
+					<li class="nav-item">
+						<a href="managemovies.html" class="nav-link">MANAGE MOVIES</a>
+					</li>
+					<li class="nav-item">
+						<a href="promotions.html" class="nav-link">PROMOTIONS</a>
+					</li>
+					<li class="nav-item">
+						<a href="manageBookings.html" class="nav-link">BOOKINGS</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a href="#" class="nav-link">ADMIN ACCOUNT</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" class="nav-link" id="logoutLink">LOGOUT</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+
+		<div class="container-fluid my-container">
+			<div class="addmovies"><br>SCHEDULE MOVIE</div>
+			<br><hr><br>
+		</div>
+		<div class="container my-container">
+			<form class = "movieForm" id="scheduleForm">
+				<table>
+					<tr>
+						<td><label class ="formLabel" for="selectMovie">Select Movie</label></td>
+						<td>
+							<select id="selectMovie" required>
+								<option value="" selected>Select Movie...</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="selectScreen">Select Screen</label></td>
+						<td>
+							<select id="selectScreen" required>
+								<option value="" selected>Select Screen...</option>
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="date">Show Date:</label></td>
+						<td><input type="date" id="date" required></td>
+					</tr>
+					<tr>
+						<td><label class ="formLabel" for="time">Show Time:</label></td>
+						<td><input type="time" id="time" required></td>
+					</tr>
+
+				</table>
+				<div id="scheduleError" class="alert alert-danger" style="display: none; margin: 20px auto; max-width: 500px;"></div>
+			</form>
+			<br>
+			<div class="container my-container btn">
+				<button type="button" class="submitButton" id="cancelButton">Cancel</button>
+				<button type="submit" form="scheduleForm" class="submitButton">Add Schedule</button>
+			</div>
+		</div>
+		<div class="container-fluid my-container">
+			<br><hr><br>
+		</div>
+		
+		
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+			crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+			crossorigin="anonymous"></script>
+		<script src="myScript.js"></script>
+		<script src="js/auth.js"></script>
+		<script>
+			document.getElementById('logoutLink').addEventListener('click', (event) => {
+				event.preventDefault();
+				logout();
+			});
+
+			document.getElementById('cancelButton').addEventListener('click', () => {
+				window.location.href = 'managemovies.html';
+			});
+
+			async function loadOptions() {
+				const movies = await fetch('/api/movies').then(r => r.json());
+				const movieSelect = document.getElementById('selectMovie');
+				movies.forEach(movie => {
+					const option = document.createElement('option');
+					option.value = movie.id;
+					option.textContent = movie.title;
+					movieSelect.appendChild(option);
+				});
+
+				const screens = await fetch('/api/admin/screens').then(r => r.json());
+				const screenSelect = document.getElementById('selectScreen');
+				screens.forEach(screen => {
+					const option = document.createElement('option');
+					option.value = screen.id;
+					option.textContent = screen.name;
+					screenSelect.appendChild(option);
+				});
+			}
+
+			document.getElementById('scheduleForm').addEventListener('submit', async (event) => {
+				event.preventDefault();
+
+				const errorBox = document.getElementById('scheduleError');
+				errorBox.style.display = 'none';
+
+				const response = await fetch('/api/admin/showtimes', {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({
+						movieId: Number(document.getElementById('selectMovie').value),
+						screenId: Number(document.getElementById('selectScreen').value),
+						showDate: document.getElementById('date').value,
+						showTime: document.getElementById('time').value
+					})
+				});
+
+				if (!response.ok) {
+					errorBox.textContent = 'Could not schedule this showtime. Please check the fields and try again.';
+					errorBox.style.display = 'block';
+					return;
+				}
+
+				window.location.href = 'managemovies.html';
+			});
+
+			loadOptions();
+		</script>
+	</body>
+</html>

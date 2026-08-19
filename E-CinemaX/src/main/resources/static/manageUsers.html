@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>E-CinemaX</title>
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+		<script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+		<link rel="stylesheet" type= "text/css" href="managemovies.css">
+	</head>
+
+	<body>
+		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+			<a href="AdminMainPage.html" class="navbar-brand">E-CinemaX</a>
+			<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarMenu">
+				<form class="form-inline ml-lg-5">
+					<input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-light my-2" type="submit"><i class="fas fa-search"></i></button>
+				</form>
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item">
+						<a href="manageUsers.html" class="nav-link" style = "margin-left: 35px">USERS</a>
+					</li>
+					<li class="nav-item">
+						<a href="managemovies.html" class="nav-link">MANAGE MOVIES</a>
+					</li>
+					<li class="nav-item">
+						<a href="promotions.html" class="nav-link">PROMOTIONS</a>
+					</li>
+					<li class="nav-item">
+						<a href="manageBookings.html" class="nav-link">BOOKINGS</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a href="#" class="nav-link">ADMIN ACCOUNT</a>
+					</li>
+					<li class="nav-item">
+						<a href="#" class="nav-link" id="logoutLink">LOGOUT</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		<div class="container-fluid my-container">
+			<div class="movielist"><br>USERS</div>
+			<br><hr><br>
+		</div>
+		<div class="container my-container">
+			<table class = "movies" id="userTable"></table>
+		</div>
+		<div class="container-fluid my-container">
+			<br><hr><br>
+		</div>
+
+
+		<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+			crossorigin="anonymous"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+			crossorigin="anonymous"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+			crossorigin="anonymous"></script>
+		<script src="myScript.js"></script>
+		<script src="js/auth.js"></script>
+		<script>
+			document.getElementById('logoutLink').addEventListener('click', (event) => {
+				event.preventDefault();
+				logout();
+			});
+
+			async function loadUsers() {
+				const users = await fetch('/api/admin/users').then(r => r.json());
+
+				const table = document.getElementById('userTable');
+				table.innerHTML = `
+					<tr>
+						<th style="text-align: center; padding: 20px" colspan="4"><b><u>ALL USERS</u></b></th>
+					</tr>
+					${users.map(user => `
+						<tr>
+							<td>${user.firstName} ${user.lastName}</td>
+							<td>${user.email}</td>
+							<td>${user.role}</td>
+							<td>
+								<button class="removeMovie toggle-status" data-user-id="${user.id}" data-enabled="${user.enabled}">
+									${user.enabled ? 'Disable' : 'Enable'}
+								</button>
+							</td>
+						</tr>`).join('')}`;
+
+				table.querySelectorAll('.toggle-status').forEach(button => {
+					button.addEventListener('click', () => toggleStatus(button.dataset.userId, button.dataset.enabled === 'true'));
+				});
+			}
+
+			async function toggleStatus(userId, currentlyEnabled) {
+				await fetch(`/api/admin/users/${userId}/status`, {
+					method: 'PUT',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify({ enabled: !currentlyEnabled })
+				});
+				loadUsers();
+			}
+
+			loadUsers();
+		</script>
+	</body>
+</html>

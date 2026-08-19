@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+		<title>E-CinemaX</title>
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
+		<script defer src="https://use.fontawesome.com/releases/v5.0.2/js/all.js"></script>
+		<link rel="stylesheet" type= "text/css" href="Registration.css">
+	</head>
+	
+	<body>
+		<nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+			<a href="Cinema.html" class="navbar-brand">E-CinemaX</a>
+			<button class="navbar-toggler" data-toggle="collapse" data-target="#navbarMenu">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarMenu">
+				<form class="form-inline ml-lg-5">
+					<input class="form-control mr-2" type="search" placeholder="Search" aria-label="Search">
+					<button class="btn btn-outline-light my-2" type="submit"><i class="fas fa-search"></i></button>
+				</form>
+				<ul class="navbar-nav ml-auto">
+					<li class="nav-item">
+						<a href="Customerlogin.html" data-toggle="tooltip" title="Login" class="nav-link"><i class="fas fa-user"></i> <span class="sr-only">LOGIN</span></a>
+					</li>
+					<li class="nav-item">
+						<a href="Registration.html" class="nav-link">SIGN UP</a>
+					</li>
+				</ul>
+			</div>         
+		</nav>
+	<div class="container-fluid my-container">
+			<div class="title"><br>REGISTRATION</div>
+			<br><hr><br>
+	</div>
+
+    <form class="col-lg-8 off offset-lg-1 styles" id="registerForm">
+      <div class="form-row required">
+        <div class="form-group required col-md-6">
+          <label class="form-check-label" for="firstName">FirstName *</label>
+          <input type="text" required class="form-control" id="firstName" placeholder="FirstName">
+        </div>
+        <div class="form-group required col-md-6">
+          <label class="form-check-label" for="lastName">LastName *</label>
+          <input type="text" required class="form-control" id="lastName" placeholder="LastName">
+        </div>
+        <div class="form-group required col-md-6">
+          <label class="form-check-label" for="dateOfBirth">Date of Birth</label>
+          <input type="date" required class="form-control" id="dateOfBirth">
+        </div>
+      </div>
+	  <div class="form-group">
+        <label class="form-check-label" for="email">Email</label>
+        <input type="email" required class="form-control" id="email" placeholder="Email">
+      </div>
+      <div class="form-row">
+        <div class="form-group required col-md-6">
+          <label class="form-check-label" for="password">Password *</label>
+          <input type="password" required class="form-control" id="password" placeholder="Password">
+        </div>
+        <div class="form-group required col-md-6">
+          <label class="form-check-label" for="confirmPassword">Confirm Password *</label>
+          <input type="password" required class="form-control" id="confirmPassword"
+            placeholder="Confirm Password">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-check-label" for="phone">Phone</label>
+        <input type="tel" class="form-control" id="phone" placeholder="705-555-2233">
+      </div>
+      <br />
+      <div class="form-group">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" id="gridCheck">
+          <label class="form-check-label" for="gridCheck">
+            Sign me up for promotions
+          </label>
+        </div>
+      </div>
+      <div id="registerError" class="alert alert-danger" style="display: none;"></div>
+      <button type="submit" class="btn btn-primary">SIGN IN</button>
+    </form>
+	
+	<div class="container-fluid my-container">
+			<br><hr><br>
+	</div>
+	
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <script src="myScript.js"></script>
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+
+      const errorBox = document.getElementById('registerError');
+      errorBox.style.display = 'none';
+
+      const password = document.getElementById('password').value;
+      if (password !== document.getElementById('confirmPassword').value) {
+        errorBox.textContent = 'Passwords do not match.';
+        errorBox.style.display = 'block';
+        return;
+      }
+
+      const response = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          firstName: document.getElementById('firstName').value,
+          lastName: document.getElementById('lastName').value,
+          email: document.getElementById('email').value,
+          password: password,
+          phone: document.getElementById('phone').value,
+          dateOfBirth: document.getElementById('dateOfBirth').value
+        })
+      });
+
+      if (response.ok) {
+        window.location.href = 'RegistrationConfirmation.html';
+      } else if (response.status === 409) {
+        errorBox.textContent = 'An account with this email already exists.';
+        errorBox.style.display = 'block';
+      } else {
+        errorBox.textContent = 'Registration failed. Please check your details and try again.';
+        errorBox.style.display = 'block';
+      }
+    });
+  </script>
+</body>
+
+</html>
