@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -46,6 +47,17 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, Object>> handleResponseStatus(ResponseStatusException ex) {
         HttpStatus status = HttpStatus.valueOf(ex.getStatusCode().value());
         return ResponseEntity.status(status).body(errorBody(status, ex.getReason()));
+    }
+
+    // A request for a static file (image, CSS, JS, or a browser's automatic
+    // /favicon.ico probe) that doesn't exist. Spring's default for this is
+    // already a 404, but without this handler it was falling through to the
+    // catch-all Exception handler below and turning into a 500 instead -
+    // found by testing the new favicon link, not something the favicon
+    // itself caused.
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<Map<String, Object>> handleMissingStaticResource(NoResourceFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorBody(HttpStatus.NOT_FOUND, "Not found"));
     }
 
     // Anything else unexpected. Logged in full server-side so it's still
