@@ -10,7 +10,7 @@ This repository contains a variety of projects I've worked on, spanning mobile a
 ```bash
 /Food-Donation-App/README.md  
 /Ride-Sharing-App/README.md  
-/Cinema-Booking-System/README.md
+/E-CinemaX/README.md
 ```
 
 ## 🌟 Projects
@@ -23,9 +23,9 @@ Tech Stack: Java, Android Studio, FirebaseA mobile application that connects foo
 
 Tech Stack: Java, Android Studio, Google Firebase user-friendly app for carpooling, allowing users to share rides, split costs, and reduce carbon footprints.
 
-3. Cinema Booking System
+3. E-CinemaX
 
-Tech Stack: ASP.NET, C#, SQL ServerAn online ticket reservation platform enabling users to browse movies, check showtimes, and book seats with ease.
+Tech Stack: Java, Spring Boot, Spring Security, Spring Data JPA/Hibernate, MySQL, HTML/CSS/JavaScript. A full-stack movie ticket booking system with real seat selection, mock payment, customer accounts and booking history, and a complete admin portal (movies, showtimes, promotions, users, bookings). See [E-CinemaX/README.md](E-CinemaX/README.md) for screenshots, architecture, and full setup instructions.
 
 ## 🚧 How to Use
 
