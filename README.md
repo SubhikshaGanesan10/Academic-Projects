@@ -55,8 +55,9 @@ Built incrementally, phase by phase. Current status: **all 8 phases complete.**
 ## Running the App
 
 First-time setup: copy `src/main/resources/application.properties.example` to
-`application.properties` (gitignored, since it holds a real DB password) and fill in your
-MySQL credentials.
+`application.properties` (gitignored, since it holds real secrets) and fill in your MySQL
+credentials plus an admin email/password of your own choosing (`app.admin.seed-email` /
+`app.admin.seed-password`).
 
 No local Maven install is needed — the Maven Wrapper (`mvnw`) downloads the exact Maven version
 the project expects.
@@ -74,9 +75,12 @@ Then open http://localhost:8080/Cinema.html in a browser.
 Requires a local MySQL server running on port 3306, with a database `ecinemax_db` and a user
 `ecinemax_app` matching the credentials in `application.properties`. On first startup, Flyway
 creates all tables from `src/main/resources/db/migration/V1__init.sql`, and the app seeds 15
-sample movies plus an admin account:
+sample movies plus an admin account using **the email/password you set** in
+`app.admin.seed-email` / `app.admin.seed-password` (nothing is hardcoded — leave them blank and
+no admin account gets created at all). That admin lands on `AdminMainPage.html`, with
+movie/showtime/promotion CRUD, user management (enable/disable), and a read-only view of every
+booking across all customers.
 
-- **Admin login:** `admin@ecinemax.com` / `Admin123!` — lands on `AdminMainPage.html`, with movie/showtime/promotion CRUD, user management (enable/disable), and a read-only view of every booking across all customers.
 - **Customer accounts:** created via the Registration page (`Registration.html`)
 
 Login uses server-side sessions (a cookie), not tokens - once logged in via `Customerlogin.html`,

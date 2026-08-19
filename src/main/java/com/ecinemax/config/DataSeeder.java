@@ -15,6 +15,9 @@ import com.ecinemax.repository.SeatRepository;
 import com.ecinemax.repository.ShowtimeRepository;
 import com.ecinemax.repository.ShowtimeSeatRepository;
 import com.ecinemax.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -31,6 +34,8 @@ import java.util.List;
 @Component
 public class DataSeeder implements CommandLineRunner {
 
+    private static final Logger log = LoggerFactory.getLogger(DataSeeder.class);
+
     private final MovieRepository movieRepository;
     private final ShowtimeRepository showtimeRepository;
     private final ScreenRepository screenRepository;
@@ -38,6 +43,15 @@ public class DataSeeder implements CommandLineRunner {
     private final ShowtimeSeatRepository showtimeSeatRepository;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+
+    // No hardcoded default on purpose - an admin account should only ever
+    // get created with a password YOU chose, set locally in the gitignored
+    // application.properties (see application.properties.example).
+    @Value("${app.admin.seed-email:}")
+    private String adminSeedEmail;
+
+    @Value("${app.admin.seed-password:}")
+    private String adminSeedPassword;
 
     public DataSeeder(MovieRepository movieRepository, ShowtimeRepository showtimeRepository,
                        ScreenRepository screenRepository, SeatRepository seatRepository,
@@ -168,15 +182,24 @@ public class DataSeeder implements CommandLineRunner {
     }
 
     // Public registration only ever creates CUSTOMER accounts, so an ADMIN
-    // account has to be created some other way - here, seeded directly.
+    // account has to be created some other way - here, seeded directly, from
+    // credentials YOU set locally rather than a password baked into source
+    // control. If they're not configured, we skip seeding rather than fall
+    // back to something guessable.
     private void seedAdminUser() {
-        if (userRepository.existsByEmail("admin@ecinemax.com")) {
+        if (adminSeedEmail.isBlank() || adminSeedPassword.isBlank()) {
+            log.warn("app.admin.seed-email / app.admin.seed-password not set - no admin account was seeded. " +
+                    "Set them in application.properties (see application.properties.example) to create one.");
+            return;
+        }
+
+        if (userRepository.existsByEmail(adminSeedEmail)) {
             return;
         }
 
         AppUser admin = new AppUser(
-                "Admin", "User", "admin@ecinemax.com",
-                passwordEncoder.encode("Admin123!"),
+                "Admin", "User", adminSeedEmail,
+                passwordEncoder.encode(adminSeedPassword),
                 null, null, UserRole.ADMIN
         );
         userRepository.save(admin);

@@ -21,3 +21,9 @@ spring.jpa.hibernate.ddl-auto=validate
 # seeing exactly what JPA is doing under the hood while learning.
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.format_sql=true
+
+# Seeds one ADMIN account on first startup, using credentials you choose here
+# - nothing is hardcoded in source. Pick your own email/password; if you
+# leave these blank, no admin account is created.
+app.admin.seed-email=admin@example.com
+app.admin.seed-password=CHANGE_ME
