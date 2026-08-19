@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize the color of the action bar or toolbar -->
+        <item name="colorPrimary">#eba937</item> <!-- Change the color to #eba937 -->
+        <item name="colorPrimaryDark">#eba937</item> <!-- Change the color of the status bar (if desired) -->
+        <!-- Other theme attributes -->
+    </style>
+</resources>
