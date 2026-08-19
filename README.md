@@ -14,9 +14,31 @@ and standard Spring Boot patterns over advanced abstractions.
 - **Build tool:** Maven (via the included Maven Wrapper — no local Maven install required)
 - **Version control:** Git/GitHub
 
+## Architecture
+
+The frontend is plain static HTML/CSS/JS, served directly by Spring Boot and talking to it purely
+over REST (`fetch()`) - no server-side templating, no JS framework. A request flows through a
+standard layered backend:
+
+```
+Browser (HTML/CSS/JS)
+   |  fetch() - JSON over HTTP, session cookie for auth
+   v
+Controller    <- thin HTTP layer: reads the request, calls a service, returns a DTO
+   v
+Service       <- business logic (e.g. "can this seat be booked?"), @Transactional boundaries
+   v
+Repository    <- Spring Data JPA interfaces; no implementation code, Spring generates the SQL
+   v
+Entity / MySQL
+```
+
+DTOs (`dto/`) keep the JSON shape sent to the browser separate from the JPA entities/database
+schema - so, for example, `AppUser.passwordHash` can never accidentally end up in an API response.
+
 ## Project Status
 
-Built incrementally, phase by phase. Current status: **Phase 7 — testing, validation, error handling, and cleanup complete.**
+Built incrementally, phase by phase. Current status: **all 8 phases complete.**
 
 | Phase | Description | Status |
 |---|---|---|
@@ -28,7 +50,7 @@ Built incrementally, phase by phase. Current status: **Phase 7 — testing, vali
 | 5 | Customer account and booking history | Done |
 | 6 | Admin functionality | Done |
 | 7 | Testing, validation, error handling, cleanup | Done |
-| 8 | Documentation polish | Not started |
+| 8 | Documentation polish | Done |
 
 ## Running the App
 
@@ -64,17 +86,45 @@ Seed data includes one screen (6 rows x 8 seats) and showtimes for every Now Sho
 the next 3 days, so there's something real to book. Payment is entirely mocked - no real payment
 gateway is contacted, and only the last 4 digits of any card number entered are ever stored.
 
+## API Overview
+
+All endpoints return/accept JSON. `/api/auth/**` and `/api/movies/**` are public; everything else
+under `/api/**` requires login, and `/api/admin/**` requires the ADMIN role (enforced in
+`SecurityConfig`, not repeated per-controller).
+
+| Area | Method + Path | Purpose |
+|---|---|---|
+| Auth | `POST /api/auth/register` | Create a customer account |
+| | `POST /api/auth/login` | Log in (starts a session) |
+| | `POST /api/auth/logout` | Log out |
+| | `GET /api/auth/me` | Who am I / am I logged in |
+| Movies | `GET /api/movies`, `GET /api/movies?status=` | Browse movies |
+| | `GET /api/movies/{id}` | Movie detail |
+| | `GET /api/movies/{id}/showtimes` | Showtimes for a movie |
+| Booking | `GET /api/ticket-types` | Ticket types + prices |
+| | `GET /api/showtimes/{id}/seats` | Seat map for a showtime |
+| | `POST /api/bookings` | Create a booking (pending payment) |
+| | `POST /api/bookings/{id}/payment` | Submit mock payment |
+| | `GET /api/bookings/me`, `GET /api/bookings/{id}` | Booking history / detail |
+| Account | `GET/PUT /api/users/me` | View/edit profile |
+| | `PUT /api/users/me/password` | Change password |
+| Admin | `POST/PUT/DELETE /api/admin/movies` | Movie CRUD |
+| | `GET /api/admin/screens`, `POST /api/admin/showtimes` | Schedule showtimes |
+| | `GET/POST/DELETE /api/admin/promotions` | Promotion CRUD |
+| | `GET /api/admin/users`, `PUT /api/admin/users/{id}/status` | User management |
+| | `GET /api/admin/bookings` | All bookings (oversight) |
+
 ## Known Gaps / Backlog
 
 Deliberately deferred, not forgotten:
 
-- **Forgot/reset password** — the link on `Customerlogin.html` is still a placeholder. Needs a
-  reset-token flow and either a real or mocked email step; not core to the booking flow, so
-  postponed until after the main phases are done (Phase 7 or its own small phase).
-- **Promo codes aren't applied at checkout yet** — Phase 6 built real Promotion CRUD for admins
+- **Forgot/reset password** — the link on `Customerlogin.html` is still a placeholder. Would need
+  a reset-token flow and either a real or mocked email step; not core to the booking flow, so
+  left out to keep the auth scope simple.
+- **Promo codes aren't applied at checkout yet** — Promotion CRUD exists for admins
   (`promotions.html`), but wiring `checkout.html` to actually validate and apply a promo code to
-  a booking's total is still deferred - it touches booking-total calculation, which was
-  intentionally kept out of Phase 6's admin-CRUD-only scope.
+  a booking's total was left out - it touches booking-total calculation, which was kept separate
+  from admin CRUD on purpose.
 
 Resolved in Phase 7 (kept here briefly for context, since they were open when Phase 6 shipped):
 seat-booking concurrency now uses optimistic locking (`ShowtimeSeat.version`) instead of a plain
