@@ -4,6 +4,8 @@ HungerHero is an Android app that connects people with surplus food (donors — 
 
 This was built as my Master's Project (CSCI 7200, University of Georgia, Spring 2024), advised by Dr. Krzysztof J. Kochut, with Dr. Eman M. Saleh on the project committee.
 
+**[Download the APK](https://github.com/SubhikshaGanesan10/Projects/releases/tag/hungerhero-v1.0)** — debug-signed build, sideload onto an Android device (7.0+).
+
 ## Features
 
 - **Account creation & login** — email/password registration and sign-in via Firebase Authentication, with "Forgot Password" email reset.
