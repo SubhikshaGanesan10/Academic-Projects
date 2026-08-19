@@ -4,6 +4,12 @@ An online movie ticket booking system, rebuilt from a static HTML/CSS/JS prototy
 full-stack Java application. This is a learning/portfolio project — the code favors clarity
 and standard Spring Boot patterns over advanced abstractions.
 
+## Demo Video
+
+[![Watch the demo](https://cdn.loom.com/sessions/thumbnails/a371a487f66348c394625c7c0208a734-31f796ab0271b724.gif)](https://www.loom.com/share/a371a487f66348c394625c7c0208a734)
+
+Click to watch a ~90 second walkthrough of the app on Loom.
+
 ## Screenshots
 
 ### Customer Experience
