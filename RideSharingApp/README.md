@@ -1,6 +1,6 @@
-# RidingApp: Campus Ride Sharing App
+# RideSharingApp: Campus Ride Sharing App
 
-RidingApp connects UGA students who need a ride (riders) with students willing to give one (drivers), using a simple points system — giving a ride earns you points, and you spend points to get a ride later.
+RideSharingApp connects UGA students who need a ride (riders) with students willing to give one (drivers), using a simple points system — giving a ride earns you points, and you spend points to get a ride later.
 
 This was built for the CSCI Mobile Software Development final project (App 2: Ride Sharing App), University of Georgia.
 

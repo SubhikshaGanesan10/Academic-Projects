@@ -9,7 +9,7 @@ This repository contains a variety of projects I've worked on, spanning mobile a
 
 ```bash
 /HungerHero/README.md  
-/RidingApp/README.md  
+/RideSharingApp/README.md  
 /E-CinemaX/README.md
 ```
 
@@ -17,7 +17,7 @@ This repository contains a variety of projects I've worked on, spanning mobile a
 
 1. **HungerHero (Food Donation App)** — Tech Stack: Java, Android Studio, Firebase Authentication, Firebase Realtime Database. An Android app connecting people with surplus food to organizations and individuals facing food insecurity, with donor/receiver roles, an accept-and-confirm flow, and in-app chat to coordinate pickup. Built as a Master's project (CSCI 7200, University of Georgia). See [HungerHero/README.md](HungerHero/README.md) for screenshots and setup instructions, or [download the APK](https://github.com/SubhikshaGanesan10/Academic-Projects/releases/tag/hungerhero-v1.0) directly.
 
-2. **Ride Sharing App (RidingApp)** — Tech Stack: Java, Android Studio, Firebase Authentication, Firebase Realtime Database. An Android app connecting UGA students who need a ride with students willing to give one, using a ride-points system, with driver/rider roles and an accept-and-confirm flow. Built for the CSCI Mobile Software Development final project, University of Georgia. See [RidingApp/README.md](RidingApp/README.md) for screenshots and setup instructions.
+2. **Ride Sharing App (RideSharingApp)** — Tech Stack: Java, Android Studio, Firebase Authentication, Firebase Realtime Database. An Android app connecting UGA students who need a ride with students willing to give one, using a ride-points system, with driver/rider roles and an accept-and-confirm flow. Built for the CSCI Mobile Software Development final project, University of Georgia. See [RideSharingApp/README.md](RideSharingApp/README.md) for screenshots and setup instructions.
 
 3. **E-CinemaX (E-Cinema Booking System)** — Tech Stack: Java, Spring Boot, Spring Security, Spring Data JPA/Hibernate, MySQL, HTML/CSS/JavaScript. A full-stack movie ticket booking system with real seat selection, mock payment, customer accounts and booking history, and a complete admin portal (movies, showtimes, promotions, users, bookings). See [E-CinemaX/README.md](E-CinemaX/README.md) for screenshots, architecture, and full setup instructions.
 
