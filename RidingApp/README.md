@@ -14,7 +14,7 @@ This was built for the CSCI Mobile Software Development final project (App 2: Ri
 - **Points balance** — a "My Points" screen shows your current ride-points balance.
 - **Remove account** — delete your account and its data at any time.
 
-## Screenshots
+## User Interface
 
 ### Registration & Login
 
