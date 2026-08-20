@@ -11,6 +11,7 @@ This repository contains a variety of projects I've worked on, spanning mobile a
 /HungerHero/README.md  
 /RideSharingApp/README.md  
 /E-CinemaX/README.md
+/FigmaPrototype/README.md
 ```
 
 ## 🌟 Projects
@@ -20,6 +21,8 @@ This repository contains a variety of projects I've worked on, spanning mobile a
 2. **Ride Sharing App (RideSharingApp)** — Tech Stack: Java, Android Studio, Firebase Authentication, Firebase Realtime Database. An Android app connecting UGA students who need a ride with students willing to give one, using a ride-points system, with driver/rider roles and an accept-and-confirm flow. Built for the CSCI Mobile Software Development final project, University of Georgia. See [RideSharingApp/README.md](RideSharingApp/README.md) for screenshots and setup instructions.
 
 3. **E-CinemaX (E-Cinema Booking System)** — Tech Stack: Java, Spring Boot, Spring Security, Spring Data JPA/Hibernate, MySQL, HTML/CSS/JavaScript. A full-stack movie ticket booking system with real seat selection, mock payment, customer accounts and booking history, and a complete admin portal (movies, showtimes, promotions, users, bookings). See [E-CinemaX/README.md](E-CinemaX/README.md) for screenshots, architecture, and full setup instructions.
+
+4. **Prototype Design in Figma (FigmaPrototype)** — A UI/UX prototype redesigning a school registration portal for usability and accessibility, built in Figma with wireframing, interactive prototyping, and a small design system, applying Human-Computer Interaction (HCI) principles. Built for the HCI course, University of Georgia. See [FigmaPrototype/README.md](FigmaPrototype/README.md). *(Folder is a placeholder — full writeup and prototype link coming soon.)*
 
 ## 🚧 How to Use
 
