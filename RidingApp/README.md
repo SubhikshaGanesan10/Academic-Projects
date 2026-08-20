@@ -14,6 +14,29 @@ This was built for the CSCI Mobile Software Development final project (App 2: Ri
 - **Points balance** — a "My Points" screen shows your current ride-points balance.
 - **Remove account** — delete your account and its data at any time.
 
+## Screenshots
+
+<table>
+<tr>
+<td align="center"><img src="screenshots/login.png" width="200"/><br/><sub>Login</sub></td>
+<td align="center"><img src="screenshots/register.png" width="200"/><br/><sub>Register</sub></td>
+<td align="center"><img src="screenshots/role-select.png" width="200"/><br/><sub>Driver / Rider role select</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="screenshots/post-ride-request.png" width="200"/><br/><sub>Post a ride request (rider)</sub></td>
+<td align="center"><img src="screenshots/post-ride-offer.png" width="200"/><br/><sub>Post a ride offer (driver)</sub></td>
+<td align="center"><img src="screenshots/my-points.png" width="200"/><br/><sub>Points balance</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="screenshots/view-ride-offers.png" width="200"/><br/><sub>Browse & accept ride offers</sub></td>
+<td align="center"><img src="screenshots/view-ride-requests.png" width="200"/><br/><sub>Browse & accept ride requests</sub></td>
+<td align="center"><img src="screenshots/edit-ride-request.png" width="200"/><br/><sub>Edit an unaccepted post</sub></td>
+</tr>
+<tr>
+<td align="center"><img src="screenshots/accepted-ride-requests.png" width="200"/><br/><sub>Confirm an accepted ride</sub></td>
+</tr>
+</table>
+
 ## Tech Stack
 
 - **Android** (Java, Android SDK 34, minSdk 24) — Android Studio, ConstraintLayout
